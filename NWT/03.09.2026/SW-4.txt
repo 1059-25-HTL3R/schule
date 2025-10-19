@@ -1,0 +1,88 @@
+!Benjamin Zwettler
+
+en
+conf t
+
+no ip domain-lookup
+hostname SW-4
+ip domain-name 5CN.at
+
+username cisco priv 15 algorithm-type scrypt secret cisco
+
+crypto key generate rsa usage-keys modulus 1024
+ip ssh version 2
+
+
+line con 0 
+exec-time 0 0
+logging synchronous
+exit
+
+line vty 0 15
+exec-time 0 0
+logging synchronous
+transport input telnet ssh
+login local
+exit
+
+spanning-tree mode rapid-pvst
+
+
+
+!VTP
+
+vtp mode clien
+vtp password cisco
+vtp domain 5CN.at
+vtp version 3
+
+
+
+
+!INTERFACES
+
+int range gigabitEthernet 0/0-3, gi 1/0-3, gi 2/0-3, gi 3/0-3
+shut
+switchport acces vlan 98
+exit
+
+
+int range gi 0/1-2
+no shut
+channel-group 4 mode active
+exit
+
+int range gi 1/1-2
+no shut
+channel-group 2 mode des
+exit
+
+int port-channel 4
+no shut
+no switchport access vlan
+switchport trunk encap dot
+switchport mode trunk
+switchport trunk allowed vlan 10,20
+exit
+
+int port-channel 2
+no shut
+no switchport acces vlan
+switchport trunk encap dot
+switchport mode trunk
+switchport trunk allowed vlan 10,20
+exit
+
+
+int g 0/0
+no shut
+switchport access vlan 20
+exit
+
+
+
+
+
+
+
+

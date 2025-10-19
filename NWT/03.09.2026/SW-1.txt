@@ -1,0 +1,120 @@
+!Benjamin Zwettler
+
+en
+conf t
+
+no ip domain-lookup
+hostname SW-1
+ip domain-name 5CN.at
+
+username cisco priv 15 algorithm-type scrypt secret cisco
+
+crypto key generate rsa usage-keys modulus 1024
+ip ssh version 2
+
+
+line con 0 
+exec-time 0 0
+logging synchronous
+exit
+
+line vty 0 15
+exec-time 0 0
+logging synchronous
+transport input telnet ssh
+login local
+exit
+
+
+spanning-tree mode rapid-pvst
+
+spanning-tree vlan 10 priority 0
+spanning-tree vlan 20 priority 0
+
+
+!VTP
+
+vtp mode server
+vtp password cisco
+vtp domain 5CN.at
+vtp version 3
+exit
+vtp primary
+
+conf t
+
+
+!VLANS
+
+vlan 10
+name MNGMT
+exit
+
+vlan 20
+name IT
+exit
+
+vlan 98
+name BLACKHOLE
+exit
+
+
+
+
+!INTERFACES
+
+int range gigabitEthernet 0/0-3, gi 1/0-3, gi 2/0-3, gi 3/0-3
+shut
+switchport access vlan 98
+exit
+
+
+int range gi 0/1-2
+no shut
+channel-group 1 mode active
+exit
+
+int range gi 1/1-2
+no shut
+channel-group 2 mode des
+exit
+
+int port-channel 1
+
+no shut
+no switchport access vlan
+
+switchport trunk encap dot
+switchport mode trunk
+switchport trunk allowed vlan 10,20
+exit
+
+int port-channel 2
+no shut
+no switchport access vlan
+switchport trunk encap dot
+switchport mode trunk
+switchport trunk allowed vlan 10,20
+exit
+
+
+
+int g 0/0
+no shut
+no switchport acces vlan
+switchport trunk encapsulation dot
+switchport mode trunk
+switchport trunk allowed vlan 10,20
+exit
+
+
+
+
+
+
+
+
+
+
+
+

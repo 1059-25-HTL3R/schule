@@ -1,0 +1,61 @@
+!Benjamin Zwettler
+
+en
+conf t
+
+no ip domain-lookup
+hostname FW-2
+ip domain-name 5CN.at
+
+username cisco priv 15 algorithm-type scrypt secret cisco
+
+crypto key generate rsa usage-keys modulus 1024
+ip ssh version 2
+
+
+line con 0 
+exec-time 0 0
+logging synchronous
+exit
+
+line vty 0 15
+exec-time 0 0
+logging synchronous
+transport input telnet ssh
+login local
+exit
+
+
+
+int g 0/0
+no shut
+exit
+
+
+int g0/0.10
+encapsulation dot 10
+ip address 192.168.10.252 255.255.255.0
+
+!HSRP
+standby 10 ip 192.168.10.254
+standby 10 priority 100
+standby 10 preempt
+
+
+exit
+
+
+int g0/0.20
+encapsulation dot 20
+ip address 192.168.20.252 255.255.255.0
+
+
+!HSRP
+standby 20 ip 192.168.20.254
+standby 20 priority 255
+standby 20 preempt
+
+exit
+
+
+ 

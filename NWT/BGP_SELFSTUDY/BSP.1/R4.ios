@@ -1,0 +1,41 @@
+configure terminal
+hostname R4
+
+no ip domain-lookup
+
+banner motd #Admins only#
+
+ip domain-name 5CN.com
+
+
+line console 0
+exec-timeout 0 0
+logging synchronous
+login local
+exit
+
+line vty 0 15
+logging synchronous
+exec-timeout 0 0
+login local
+transport input telnet ssh
+exit
+
+
+
+int g 0/0
+no shut
+ip address 172.168.3.2 255.255.255.0
+exit
+
+
+int g 0/1
+no shut
+ip address 172.168.2.1 255.255.255.0
+exit
+
+
+router bgp 2
+neighbor 172.168.2.2 remote-as 1
+network 172.168.2.0 mask 255.255.255.0
+exit

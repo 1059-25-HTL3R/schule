@@ -1,0 +1,36 @@
+configure terminal
+hostname R3
+
+no ip domain-lookup
+
+banner motd #Admins only#
+
+ip domain-name 5CN.com
+
+
+line console 0
+exec-timeout 0 0
+logging synchronous
+login local
+exit
+
+line vty 0 15
+logging synchronous
+exec-timeout 0 0
+login local
+transport input telnet ssh
+exit
+
+
+int g 0/0
+no shut
+ip address 172.168.3.1 255.255.255.0
+exit
+
+
+int g0/1
+no shut
+ip address 172.168.1.1 255.255.255.0
+exit
+
+

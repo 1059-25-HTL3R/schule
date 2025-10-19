@@ -1,0 +1,69 @@
+configure terminal
+hostname R2
+
+no ip domain-lookup
+
+banner motd #Admins only#
+
+ip domain-name 5CN.com
+
+
+line console 0
+exec-timeout 0 0
+logging synchronous
+login local
+exit
+
+line vty 0 15
+logging synchronous
+exec-timeout 0 0
+login local
+transport input telnet ssh
+exit
+
+int lo1
+no shut
+ip address 131.108.0.5 255.255.255.255
+exit
+
+
+int lo2
+no shut
+ip address 131.108.0.6 255.255.255.255
+exit
+
+
+int lo3
+no shut
+ip address 131.108.0.7 255.255.255.255
+exit
+
+
+int g 0/0
+no shut
+ip address 10.0.0.2 255.255.255.0
+
+
+int g 0/1
+no shut
+ip address 172.168.2.2 255.255.255.0
+exit
+
+
+
+router ospf 10
+network 10.0.0.0 0.0.0.255 area 10
+network 131.108.0.5 0.0.0.0 area 10
+network 131.108.0.6 0.0.0.0 area 10
+network 131.108.0.7 0.0.0.0 area 10
+exit
+
+
+
+router bgp 1
+neighbor 10.0.0.1 remote-as 1
+neighbor 172.168.2.1 remote-as 2
+network 10.0.0.0 mask 255.255.255.0
+network 172.168.2.0 mask 255.255.255.0
+exit
+

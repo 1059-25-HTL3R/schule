@@ -1,0 +1,76 @@
+!Benjamin Zwettler
+
+en
+conf t
+
+no ip domain-lookup
+hostname A1-ISP-BR-2
+ip domain-name 5CN.at
+
+username cisco priv 15 algorithm-type scrypt secret cisco
+
+crypto key generate rsa usage-keys modulus 1024
+ip ssh version 2
+
+
+line con 0 
+exec-time 0 0
+logging synchronous
+exit
+
+line vty 0 15
+exec-time 0 0
+logging synchronous
+transport input telnet ssh
+login local
+exit
+
+int g 0/1
+no shut
+!public space
+ip address 33.33.33.254 255.255.255.0
+exit
+
+int g 0/2
+no shut
+!ISP space
+ip address 10.0.0.2 255.255.255.0
+exit
+
+int lo 1
+ip address 5.5.5.5 255.255.255.255
+exit
+
+router ospf 30
+router-id 5.5.5.5
+network 10.0.0.0 0.0.0.255 area 30
+exit
+
+int tunnel 1
+no shut
+ip address 172.168.1.2 255.255.255.0
+tunnel source 10.0.0.2
+tunnel dest 10.0.0.1
+exit
+
+router ospf 40
+network 172.168.1.0 0.0.0.255 area 40
+network 5.5.5.5 0.0.0.0 area 40
+passive-interface g0/1
+exit
+
+
+
+!BGP
+router bgp 20
+
+neighbor 4.4.4.4 remote-as 20
+neighbor 4.4.4.4 update-source lo1
+neighbor 4.4.4.4 route-reflector-client
+
+network 33.33.33.0 mask 255.255.255.0
+exit
+
+
+
+

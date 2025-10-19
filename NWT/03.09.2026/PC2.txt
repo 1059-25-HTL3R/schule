@@ -1,0 +1,33 @@
+!Benjamin Zwettler
+
+en
+conf t
+
+no ip domain-lookup
+hostname PC2
+ip domain-name 5CN.at
+
+username cisco priv 15 algorithm-type scrypt secret cisco
+
+crypto key generate rsa usage-keys modulus 1024
+ip ssh version 2
+
+
+line con 0 
+exec-time 0 0
+logging synchronous
+exit
+
+line vty 0 15
+exec-time 0 0
+logging synchronous
+transport input telnet ssh
+login local
+exit
+
+
+
+int g 0/0
+no shut
+ip address 192.168.20.1 255.255.255.0
+exit

@@ -1,0 +1,82 @@
+!Benjamin Zwettler
+
+en
+conf t
+
+no ip domain-lookup
+hostname MAG-ISP-BR-3
+ip domain-name 5CN.at
+
+username cisco priv 15 algorithm-type scrypt secret cisco
+
+crypto key generate rsa usage-keys modulus 1024
+ip ssh version 2
+
+
+line con 0 
+exec-time 0 0
+logging synchronous
+exit
+
+line vty 0 15
+exec-time 0 0
+logging synchronous
+transport input telnet ssh
+login local
+exit
+
+
+int g 0/1
+no shut
+!zwischen ISP space
+ip address 99.99.99.1 255.255.255.0
+exit
+
+int g 0/2
+no shut
+!ISP space
+ip address 10.0.1.2 255.255.255.0
+exit
+
+!LOOPBacks
+int lo 1
+no shut
+ip address 3.3.3.3 255.255.255.255
+exit
+
+
+
+
+!OSPF
+
+router ospf 10
+router-id 3.3.3.3
+network 10.0.1.0 0.0.0.255 area 10
+
+passive-interface g0/1
+exit
+
+
+int tunnel 2
+no shut
+ip address 172.168.2.2 255.255.255.0
+tunnel source 10.0.1.2
+tunnel dest 10.0.1.1
+exit
+
+router ospf 20
+network 172.168.2.0 0.0.0.255 area 20
+network 3.3.3.3 0.0.0.0 area 20
+passive-interface g0/1
+exit
+
+
+
+!BGP
+router bgp 10
+
+neighbor 2.2.2.2 remote-as 10
+neighbor 2.2.2.2 update-source lo1
+
+exit
+
