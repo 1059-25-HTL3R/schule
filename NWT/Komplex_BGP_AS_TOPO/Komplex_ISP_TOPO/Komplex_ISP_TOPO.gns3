@@ -214,8 +214,8 @@
                 "symbol": ":/symbols/classic/router.svg",
                 "template_id": "78717315-ce10-4886-bcf9-a8df6c521485",
                 "width": 66,
-                "x": 98,
-                "y": -292,
+                "x": 150,
+                "y": -285,
                 "z": 1
             },
             {
@@ -494,8 +494,8 @@
                 "symbol": ":/symbols/classic/router.svg",
                 "template_id": "78717315-ce10-4886-bcf9-a8df6c521485",
                 "width": 66,
-                "x": 407,
-                "y": -351,
+                "x": 389,
+                "y": -345,
                 "z": 1
             }
         ]
