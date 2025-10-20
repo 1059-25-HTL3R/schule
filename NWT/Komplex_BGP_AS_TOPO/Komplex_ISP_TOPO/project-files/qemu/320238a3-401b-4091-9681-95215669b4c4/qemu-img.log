@@ -1,1 +1,0 @@
-Formatting '/mnt/shared/schule/NWT/Komplex_BGP_AS_TOPO/Komplex_ISP_TOPO/project-files/qemu/320238a3-401b-4091-9681-95215669b4c4/hdb_disk.qcow2', fmt=qcow2 cluster_size=65536 extended_l2=off compression_type=zlib size=1048576 backing_file=/home/zwett/GNS3/images/QEMU/IOSv_startup_config.img backing_fmt=raw lazy_refcounts=off refcount_bits=16
