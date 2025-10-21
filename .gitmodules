@@ -1,0 +1,3 @@
+[submodule "SEW-REAL"]
+	path = SEW-REAL
+	url = https://github.com/1059-25-HTL3R/SEW-REAL.git
