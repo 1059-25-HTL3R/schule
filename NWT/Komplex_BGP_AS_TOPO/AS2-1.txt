@@ -73,4 +73,8 @@ mpls ip
 exit
 
 
+#BGP
+router bgp 2
 
+neighbor 3.3.3.3 remote-as 2
+neighbor 3.3.3.3 update-source lo 1

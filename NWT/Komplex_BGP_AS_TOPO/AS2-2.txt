@@ -74,3 +74,10 @@ exit
 interface g0/3
 mpls ip
 exit
+
+#BGP
+router bgp 2
+
+neighbor 2.2.2.2 remote-as 2
+neighbor 2.2.2.2 update-source lo 1
+
