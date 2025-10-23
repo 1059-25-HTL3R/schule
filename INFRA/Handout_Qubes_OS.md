@@ -54,3 +54,6 @@ Jede Anwendung läuft in ihrer eigenen VM. Dadurch bleibt ein kompromittierter B
 
 ---
 *„A reasonably secure operating system“ – Qubes OS*
+
+Benjamin Zwettler
+Niclas Baumgartlinger
