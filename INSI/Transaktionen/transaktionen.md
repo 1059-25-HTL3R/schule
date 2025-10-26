@@ -181,10 +181,68 @@ INSERT INTO konto VALUES (1, 100.00);
     und eine andere Transaktion fügt neue Zeilen hinzu oder löscht welche,
     sodass beim zweiten Lesen mehr oder weniger Zeilen erscheinen -> also „Phantome“.
 
-    - ### READ UNCOMMITTED  - isolation level
     - ### READ COMMITTED    - isolation level
+        Session A *(reader)*:
+        ```
+        USE isolation_demo;
+
+        SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+        START TRANSACTION;
+
+        SELECT * FROM konto WHERE kontostand >= 100;
+        -- → Zeigt 1 Zeile
+        ```
+        Session B *(writer*):
+        ```
+        USE isolation_demo;
+
+        SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+        START TRANSACTION;
+
+        INSERT INTO konto VALUES (2, 100.00);
+        COMMIT;
+        ```
+        Session A (selbe transaktion):
+        ```
+        SELECT * FROM konto WHERE kontostand >= 100;
+        -- → Jetzt 2 Zeilen (1 und 2)
+        COMMIT;
+        ```
+    ---
     - ### REPEATABLE READ   - isolation level
+        Session A *(reader)*:
+        ```
+        USE isolation_demo;
+
+        SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+        START TRANSACTION;
+
+        SELECT * FROM konto WHERE kontostand >= 100;
+        -- → Zeigt 1 Zeile
+        ```
+        Session B *(writer*):
+        ```
+        USE isolation_demo;
+
+        SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+        START TRANSACTION;
+
+        INSERT INTO konto VALUES (2, 100.00);
+        COMMIT;
+        ```
+        Session A (selbe transaktion):
+        ```
+        SELECT * FROM konto WHERE kontostand >= 100;
+        -- → Immer noch 1 Zeile1
+        COMMIT;
+        ```
+        **ACHTUNG!**: es kann bei Repeatable read (in mysql) zu phantom reads kommen! Auch wenn obiges anderes aussagt. Bei kompleyeren abfragen kann es durchaus zu phantoms kommen mehr info findest du [hier](https://stackoverflow.com/questions/5444915/how-to-produce-phantom-read-in-repeatable-read-mysql) 
+
+    ---
     - ### Serializable      - isolation level
+        hier wartet session B wieder bis Session A commitet oder ein rollbaack macht 
 
 
 ## Datenbank aufsetzen
+wir verwenden eine Ubuntu VM
+- MySQL instalieren
