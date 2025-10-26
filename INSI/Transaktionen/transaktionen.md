@@ -51,6 +51,7 @@ INSERT INTO konto VALUES (1, 100.00);
         SELECT * FROM konto WHERE id = 1;
         -- → Gibt 200.00 zurück, obwohl A noch nicht committet hat!
         ```
+    ---
     - ### READ COMMITTED    - isolation level
         Session A:
         ```
@@ -70,6 +71,7 @@ INSERT INTO konto VALUES (1, 100.00);
         SELECT * FROM konto WHERE id = 1;
         -- → Gibt 100.00 zurück (alte, committete Version)
         ```
+    ---
     - ### REPEATABLE READ   - isolation level
         Session A:
         ```
@@ -89,6 +91,7 @@ INSERT INTO konto VALUES (1, 100.00);
         SELECT * FROM konto WHERE id = 1;
         -- → 100.00 (keine uncommitteten Werte sichtbar)
         ```
+    ---
     - ### Serializable      - isolation level
         Session A:
         ```
@@ -108,7 +111,7 @@ INSERT INTO konto VALUES (1, 100.00);
         -- wartet bis andere laufende transaktionen fertig sind bevor daten gelsensen werden
         ```
 - ## Nonrepeatable read
-                                                                                                
+
     - ### READ COMMITTED    - isolation level
     - ### REPEATABLE READ   - isolation level
     - ### Serializable      - isolation level
