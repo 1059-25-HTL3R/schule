@@ -245,4 +245,7 @@ INSERT INTO konto VALUES (1, 100.00);
 
 ## Datenbank aufsetzen
 wir verwenden eine Ubuntu VM
-- MySQL instalieren
+- MySQL [instalieren](https://www.youtube.com/watch?v=455KKhZyvow)
+- [remote login zulassen](https://www.youtube.com/watch?v=DjUD7_mJJPE)
+
+ich verwende dann die ip von meiner Ubuntu vm und das DB passwort und user um mich via datagrip remote einzuloggen
