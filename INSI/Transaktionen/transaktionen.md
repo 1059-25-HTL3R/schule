@@ -104,6 +104,8 @@ INSERT INTO konto VALUES (1, 100.00);
         ```
         Session B:
         ```
+        USE isolation_demo;
+
         SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
         START TRANSACTION;
         SELECT * FROM konto WHERE id = 1;
@@ -111,11 +113,74 @@ INSERT INTO konto VALUES (1, 100.00);
         -- wartet bis andere laufende transaktionen fertig sind bevor daten gelsensen werden
         ```
 - ## Nonrepeatable read
-
+    read uncommitet wird weggelassen.
     - ### READ COMMITTED    - isolation level
+        Session A *(reader)*:
+        ```
+        USE isolation_demo;
+
+        SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+        START TRANSACTION;
+
+        -- Erste Leseoperation
+        SELECT kontostand FROM konto WHERE id = 1;
+        -- → Ergebnis: 100.00
+        ```
+        Session B *(writer*):
+        ```
+        USE isolation_demo;
+
+        SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+        START TRANSACTION;
+
+        UPDATE konto SET kontostand = 300.00 WHERE id = 1;
+        COMMIT;
+        ```
+        Session A (selbe transaktion):
+        ```
+        -- Zweite Leseoperation
+        SELECT kontostand FROM konto WHERE id = 1;
+        -- → Ergebnis: 300.00
+        ```
+        beim zweiten read ist der wert anders als beim ersten Obwohl Session A immernoch in der selben transaktion ist.
+    ---
     - ### REPEATABLE READ   - isolation level
+        Session A *(reader)*:
+        ```
+        USE isolation_demo;
+
+        SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+        START TRANSACTION;
+
+        -- Erste Leseoperation
+        SELECT kontostand FROM konto WHERE id = 1;
+        -- → Ergebnis: 100.00
+        ```
+        Session B *(writer*):
+        ```
+        USE isolation_demo;
+
+        SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+        START TRANSACTION;
+
+        UPDATE konto SET kontostand = 400.00 WHERE id = 1;
+        COMMIT;
+        ```
+        Session A (selbe transaktion):
+        ```
+        SELECT kontostand FROM konto WHERE id = 1;
+        -- → 100.00 (immer noch alter Wert!)
+        ```
+    ---
     - ### Serializable      - isolation level
+        hier wartet session B bis Session A commitet oder ein rollbaack macht -> kein repeatable read aber auch keine parralellen transaktionen.
 - ## Phantom read 
+    Ein Phantom Read tritt auf, wenn:
+
+    Eine Transaktion mehrere Zeilen liest, die einem bestimmten Kriterium entsprechen,
+    und eine andere Transaktion fügt neue Zeilen hinzu oder löscht welche,
+    sodass beim zweiten Lesen mehr oder weniger Zeilen erscheinen -> also „Phantome“.
+
     - ### READ UNCOMMITTED  - isolation level
     - ### READ COMMITTED    - isolation level
     - ### REPEATABLE READ   - isolation level
