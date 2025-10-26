@@ -36,7 +36,7 @@ Sub-Domain: **firma.corp.at**
     - DC1-1 als dns server auf DC3-1 eintragen
     - DC3-1 in die domain corp.at einbinden *(das macht man dort wo auch der computername gesetzt wird)*
     
-        jetzt sollten sich DC1-1 und DC3-1 sich gegenseitig via hostnamen pingen/nslookup können
+        jetzt sollten sich DC1-1 und DC3-1 sich gegenseitig via hostnamen/fqdn pingen/nslookup können
     - DC3-1 zu einem Domaincontroler upgraden:
 
     ![wizzard for DC upgrade](./IMAGES/wizzard_upgrade_deployment_configuration.png)
