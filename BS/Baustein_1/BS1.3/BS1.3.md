@@ -71,3 +71,12 @@ RODC's werden in unsicheren standorten verwendet da auch wenn irgendwie zugriff 
 
     ![active directory user and computer](./IMAGES/user_and_computers_screenshot.png)
 
+- ## [Credential Cashing Überprüfen](https://learn.microsoft.com/en-us/troubleshoot/windows-server/user-profiles-and-logon/cached-domain-logon-information)
+
+    in dem "**Registry-Editor**" unter dem key:
+    
+    ```Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon```
+
+    in der Regel: ```CashedLoginCount```
+
+
