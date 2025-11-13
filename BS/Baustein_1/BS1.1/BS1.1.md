@@ -139,6 +139,15 @@ wir benutzen eine Ubuntu VM als router
 
     Bild zeigt eine zusammenfassung der letzen replikationen an und ob diese versuche gelungen sind oder nicht
 
+## Replikation Probleme
+- ## Replikation Forcen
+
+    Um Änderungen sofort und manuell zwischen Domain Controllern (DCs) zu synchronisieren – anstatt auf den normalen Replikationszyklus zu warten
+    - ```repadmin /syncall /AeD```
+
+    ![repadmin /syncall /AeD output](./IMAGES/repadmin_syncall_AeD_output.png)
+
+    Bild zeigt eine erfolgreiche Force Replikation.
 
 # Quellen
 [Microsoft MULTI-SITE](https://learn.microsoft.com/en-us/windows-server/remote/remote-access/ras/multisite/configure/configure-a-multisite-deployment)
