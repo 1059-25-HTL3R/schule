@@ -116,6 +116,10 @@ wir benutzen eine Ubuntu VM als router
             
             änderungen speichern und änderungen aktivieren mit folgendem command:
         - ```udo sysctl -p``` 
+            
+            **WICHTIG**: Firewall am router ausmachen (oder konfigurieren):
+
+            ```sudo ufw disable```
     
     - testen ob DC1-1 und DC2-1 sich pingen können
     - wenn ja -> [DC2-1 weitermachen](#dc2-1-nach-router-konfiguration)
