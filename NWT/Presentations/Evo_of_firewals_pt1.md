@@ -3,16 +3,14 @@
 #### Jan Willimek, Benjamin Zwettler
 
 
-- ## History
-    - um 1980 erste ansätze einer firewall entwickelt
-        - eingeführt wegen zunehmenden 
-
-
-- ## Packetfilter
+- ## Packetfilter 
+    - der erste ansatz einer firewall. 
 
 - ## Stattefull & Cbac
 
 - ## Zone based Firewalls
+
+- ## Fun facts
 
 - ## Quellen
     - [www.paloaltonetworks.com](https://www.paloaltonetworks.com/cyberpedia/history-of-firewalls)
