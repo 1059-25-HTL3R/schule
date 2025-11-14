@@ -4,10 +4,20 @@
 
 
 - ## Packetfilter 
-    - der erste ansatz einer firewall. 
+    ende der 1980er: der erste Ansatz einer firewall 
+    
+    Filtern einzelne Packete anhand einfacher regeln:
+    - Source und Destination IP-Adresse
+    - Port Nummer
+    - Protokol
 
-- ## Stattefull & Cbac
-sajjoasjdaposdjif
+
+    Packetfilter firewalls sind **Stateless**! ->
+
+        
+
+- ## Statefull & Cbac
+
 - ## Zone based Firewalls
 
 - ## Fun facts
