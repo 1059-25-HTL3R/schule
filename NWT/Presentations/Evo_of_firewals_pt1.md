@@ -50,11 +50,39 @@ Um lokalen ssh zugang als whitelist zu ermöglichen verwenden wir eine ACL die a
 <GRAFIK EINFÜGEN>
 
 
-## Statefull & Cbac
+## Stateful & Cbac
+### Stateful Firewalls:
+Anfang 2000er zweite generation von Firewalls:
+#### Stateful Firewalls Eigenschaften
+- Packete nicht mehr generell als alleinstehnd angesehen
+- Packete als Teile eines größeren Austausches zwischen Hosts betrachtet
+- überwachen des Zustands der Verbindungen
+- ermitteln und behalten des Kontexts vom Traffic
+- herausfinden der Zusammenhänge zwischen Packeten
 
+#### Funktionsweise
+##### States    
+Werden vewendet um den Status der Session anzugeben.
+
+Bsp.: Client application startet TCP Verbindung
+- bei TCP werden die 4 bits SYN,ACK,RST,FIN zur Bestimmung vom State verwendet
+- TCP SYN flag wird gesetzt um den Start der Verbindung anzugeben -> Firewall erkennt Flag und setzt State auf NEW.
+- Nach Antwort vom Server mit SYN + ACK Flags hat Firewall Packete von beiden Seiten erkannt -> Firewall setzt connection State auf ESTABLISHED  
+- Nach Sendung von RST oder FIN + ACK Flags -> Firewall bereitet State für Löschung vor
+
+##### State table
+Wird verwendet um zu überprüfen ob Packets zu einer vorhandenen Session gehören.
+Beinhaltet session Information:
+  - Source IP
+  - Destination IP
+  - Protocol
+  - State
 ## Zone based Firewalls
 
 ## Fun facts
 
 ## Quellen
 - [www.paloaltonetworks.com](https://www.paloaltonetworks.com/cyberpedia/history-of-firewalls)
+- [illumio.com] (https://www.illumio.com/blog/firewall-stateful-inspection)
+- [fortinet.com] (https://www.fortinet.com/de/resources/cyberglossary/stateful-firewall)
+- [paubox.com] (https://www.paubox.com/blog/what-is-a-stateful-firewall)
