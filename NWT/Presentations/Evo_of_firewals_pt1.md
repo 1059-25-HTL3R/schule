@@ -49,6 +49,7 @@ Um lokalen ssh zugang als whitelist zu ermöglichen verwenden wir eine ACL die a
 
 <img src="./IMAGES/ACL/Clean_ACL_beispiel_screenshot.png"  width="100%" height="">
 
+*der rechte router kann nur noch von der addresse 10.0.0.2 via ssh administriert werden.*
 
 ## Stateful & Cbac
 ### Stateful Firewalls:
@@ -77,6 +78,8 @@ Beinhaltet session Information:
   - Destination IP
   - Protocol
   - State
+
+  
 ## Zone based Firewalls
 
 ## Fun facts
