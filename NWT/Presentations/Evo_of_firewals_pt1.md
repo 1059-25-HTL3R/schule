@@ -93,9 +93,22 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
 - Zonen
     - interfaces werden zonen zugewiesen
 - Zonen-Paare
+
+
     - haben "Richtungen"
         
         das Zonen-Paar "A Nach B" kann sich anders verhalten als das Zonen-Paar "B nach A"
+- class-map's
+    
+    in der classmap wird bestimmt:
+
+    - welche "Typen" an Traffic überprüft werden (Bsp. https, tcp, etc.)
+
+    - eine ACL die traffic anhand von addressen zuläst
+    
+- policy-map's
+    - 
+
 
 ## Fun facts
 
@@ -106,6 +119,5 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
 - [illumio.com](https://www.illumio.com/blog/firewall-stateful-inspection)
 - [fortinet.com](https://www.fortinet.com/de/resources/cyberglossary/stateful-firewall)
 - [paubox.com](https://www.paubox.com/blog/what-is-a-stateful-firewall)
-
 - [geeksforgeeks.org](https://www.geeksforgeeks.org/computer-networks/zone-based-firewall/)
 - [cisco.com](https://www.cisco.com/c/de_de/support/docs/unified-communications/unified-border-element/220378-configure-zone-based-firewall-zbfw-co.html)
