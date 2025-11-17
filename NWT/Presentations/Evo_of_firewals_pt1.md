@@ -62,7 +62,7 @@ Anfang 2000er zweite Generation von Firewalls:
 - Kontext des Traffic wird ermittelt und zwischengespeichert
 - Zusammenhänge zwischen den Packeten werden beachtet
 
-#### Funktionsweise
+#### Funktionsweise:
 ##### States    
 Werden vewendet um den Status der Session anzugeben.
 
@@ -87,12 +87,25 @@ Beinhaltet session Information:
 
 # Zone based Firewalls
 
+anfang der 2000er: als Erweiterung der Statefull-Firewalls
 
+#### ZBF Eigenschaften:
+- Zonen
+    - interfaces werden zonen zugewiesen
+- Zonen-Paare
+    - haben "Richtungen"
+        
+        das Zonen-Paar "A Nach B" kann sich anders verhalten als das Zonen-Paar "B nach A"
 
 ## Fun facts
 
+
+
 ## Quellen
-- [www.paloaltonetworks.com](https://www.paloaltonetworks.com/cyberpedia/history-of-firewalls)
-- [illumio.com] (https://www.illumio.com/blog/firewall-stateful-inspection)
-- [fortinet.com] (https://www.fortinet.com/de/resources/cyberglossary/stateful-firewall)
-- [paubox.com] (https://www.paubox.com/blog/what-is-a-stateful-firewall)
+- [paloaltonetworks.com](https://www.paloaltonetworks.com/cyberpedia/history-of-firewalls)
+- [illumio.com](https://www.illumio.com/blog/firewall-stateful-inspection)
+- [fortinet.com](https://www.fortinet.com/de/resources/cyberglossary/stateful-firewall)
+- [paubox.com](https://www.paubox.com/blog/what-is-a-stateful-firewall)
+
+- [geeksforgeeks.org](https://www.geeksforgeeks.org/computer-networks/zone-based-firewall/)
+- [cisco.com](https://www.cisco.com/c/de_de/support/docs/unified-communications/unified-border-element/220378-configure-zone-based-firewall-zbfw-co.html)
