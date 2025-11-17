@@ -51,7 +51,7 @@ Um lokalen ssh zugang als whitelist zu ermöglichen verwenden wir eine ACL die a
 
 *der rechte router kann nur noch von der addresse 10.0.0.2 via ssh administriert werden.*
 
-## Stateful & Cbac
+# Stateful & Cbac
 ### Stateful Firewalls:
 Anfang 2000er zweite generation von Firewalls:
 #### Stateful Firewalls Eigenschaften
@@ -79,8 +79,10 @@ Beinhaltet session Information:
   - Protocol
   - State
 
-  
-## Zone based Firewalls
+
+# Zone based Firewalls
+
+
 
 ## Fun facts
 
