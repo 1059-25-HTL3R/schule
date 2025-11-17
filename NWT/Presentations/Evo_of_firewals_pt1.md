@@ -92,27 +92,33 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
 #### ZBF Eigenschaften:
 - Zonen
     - interfaces werden zonen zugewiesen
-- Zonen-Paare
 
-
-    - haben "Richtungen"
-        
-        das Zonen-Paar "A Nach B" kann sich anders verhalten als das Zonen-Paar "B nach A"
 - class-map's
     
     in der classmap wird bestimmt:
 
     - welche "Typen" an Traffic überprüft werden (Bsp. https, tcp, etc.)
 
-    - eine ACL die traffic anhand von addressen zuläst
+    - eine ACL die traffic anhand von addressen zulässt
     
 - policy-map's
-    - 
+
+    in der policy map: 
+    
+    - werden class-maps angegeben und wie sie behandelt werden
+
+    - was mit dem traffic passiert der nicht in eine angegebene class-map fällt (default: wird drop)
+
+- Zonen-Paare
+
+    in einem Zonen-Paar:
+    
+    - wird Traffic von einer Source-Zone in Richtung einer Destination-Zone anhand einer angegebenen policy-map überprüft.
 
 
 ## Fun facts
 
-
+- Der Begriff "Firewall" stammt von Brandmauern welche im Bauwesen verwendet werden um die Ausbreitung von Feuer in kleinere Bereiche einzudämmen.
 
 ## Quellen
 - [paloaltonetworks.com](https://www.paloaltonetworks.com/cyberpedia/history-of-firewalls)
