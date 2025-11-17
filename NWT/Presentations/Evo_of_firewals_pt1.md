@@ -49,29 +49,35 @@ Um lokalen ssh zugang als whitelist zu ermöglichen verwenden wir eine ACL die a
 
 <img src="./IMAGES/ACL/Clean_ACL_beispiel_screenshot.png"  width="100%" height="">
 
+*der rechte router kann nur noch von der addresse 10.0.0.2 via ssh administriert werden.*
 
 # Stateful & Cbac
 ### Stateful Firewalls:
-Anfang 2000er zweite generation von Firewalls:
+Anfang 2000er zweite Generation von Firewalls:
+
 #### Stateful Firewalls Eigenschaften
-- Packete nicht mehr generell als alleinstehnd angesehen
-- Packete als Teile eines größeren Austausches zwischen Hosts betrachtet
-- überwachen des Zustands der Verbindungen
-- ermitteln und behalten des Kontexts vom Traffic
-- herausfinden der Zusammenhänge zwischen Packeten
+- Pakete werden nicht mehr generell als alleinstehnd angesehen
+- Pakete werden als Teile eines größeren Austausches zwischen Hosts betrachtet
+- Zustände der Verbindungen werden überwacht
+- Kontext des Traffic wird ermittelt und zwischengespeichert
+- Zusammenhänge zwischen den Packeten werden beachtet
 
 #### Funktionsweise
 ##### States    
 Werden vewendet um den Status der Session anzugeben.
 
-Bsp.: Client application startet TCP Verbindung
+**Bsp:**
+Client Application startet TCP Verbindung:
 - bei TCP werden die 4 bits SYN,ACK,RST,FIN zur Bestimmung vom State verwendet
-- TCP SYN flag wird gesetzt um den Start der Verbindung anzugeben -> Firewall erkennt Flag und setzt State auf NEW.
-- Nach Antwort vom Server mit SYN + ACK Flags hat Firewall Packete von beiden Seiten erkannt -> Firewall setzt connection State auf ESTABLISHED  
-- Nach Sendung von RST oder FIN + ACK Flags -> Firewall bereitet State für Löschung vor
+- TCP SYN Flag wird beim Start der Verbindung gesetzt
+- Firewall erkennt das Flag und setzt State auf NEW
+- Danach kommt die Antwort vom Server mit TCP SYN + ACK Flags
+- Firewall setzt nun Connection State auf ESTABLISHED, da nun von beiden Richtungen Pakete erkannt wurden
+- Nun folgt TCP RST oder FIN + ACK Flags
+- Firewall bereitet State für Löschung vor
 
 ##### State table
-Wird verwendet um zu überprüfen ob Packets zu einer vorhandenen Session gehören.
+Wird verwendet um zu überprüfen ob Pakete zu einer vorhandenen Session gehören.
 Beinhaltet session Information:
   - Source IP
   - Destination IP
