@@ -47,7 +47,7 @@ ACLs *(Paketfilter)* sind einfach und relativ schnell zu konfigurieren. Haben ab
 
 Um lokalen ssh zugang als whitelist zu ermöglichen verwenden wir eine ACL die ausgewählte Addressen auf unseren ssh tcp port zuläst und den rest blockiert.
 
-<GRAFIK EINFÜGEN>
+<img src="./IMAGES/ACL/Clean_ACL_beispiel_screenshot.png"  width="100%" height="">
 
 
 ## Stateful & Cbac
