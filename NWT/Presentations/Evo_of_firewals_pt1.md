@@ -140,6 +140,12 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
      
     ```
 
+- ### Zone-Based-Firewall
+    Zonen erstellen:
+    ```
+    
+    ```
+
 ## Fun facts
 
 - Der Begriff "Firewall" stammt von Brandmauern welche im Bauwesen verwendet werden um die Ausbreitung von Feuer in kleinere Bereiche einzudämmen.
@@ -149,5 +155,7 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
 - [illumio.com](https://www.illumio.com/blog/firewall-stateful-inspection)
 - [fortinet.com](https://www.fortinet.com/de/resources/cyberglossary/stateful-firewall)
 - [paubox.com](https://www.paubox.com/blog/what-is-a-stateful-firewall)
-- [geeksforgeeks.org](https://www.geeksforgeeks.org/computer-networks/zone-based-firewall/)
+- [geeksforgeeks.org (ZBF)](https://www.geeksforgeeks.org/computer-networks/zone-based-firewall/)
+- [geeksforgeeks.org (cbac)](https://www.geeksforgeeks.org/computer-networks/context-based-access-control-cbac/)
 - [cisco.com](https://www.cisco.com/c/de_de/support/docs/unified-communications/unified-border-element/220378-configure-zone-based-firewall-zbfw-co.html)
+- [cisco.com (cbac)](https://www.cisco.com/c/en/us/td/docs/ios/sec_data_plane/configuration/guide/12_4/sec_data_plane_12_4_book/sec_cfg_content_ac.pdf)
