@@ -108,7 +108,7 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
 - policy-map's
 
     in der policy map: 
-    
+
     - werden class-maps angegeben und wie sie behandelt werden
 
     - was mit dem traffic passiert der nicht in eine angegebene class-map fällt (default: wird drop)
@@ -131,9 +131,13 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
      access-class TerminalAccess in
     ```
 
-- ### Statefull FW (CBAC)
+- ### Stateful FW (CBAC)
     ```
-    
+    ip inspect name MY-CBAC http
+    ip inspect name MY-CBAC ftp
+    interface GigabitEthernet0/0
+     ip inspect MY-CBAC out
+     
     ```
 
 ## Fun facts
