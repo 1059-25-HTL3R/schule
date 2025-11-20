@@ -115,6 +115,22 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
     
     - wird Traffic von einer Source-Zone in Richtung einer Destination-Zone anhand einer angegebenen policy-map überprüft.
 
+## Config
+- ### Packetfilter *(ACL)*
+    ```
+    ip access-list extended TerminalAccess
+     permit tcp host 10.0.0.2 any eq ssh
+     permit tcp any any eq 22
+     deny tcp any any
+    !
+    line vty 0 4
+     access-class TerminalAccess in
+    ```
+
+- ### Statefull FW (CBAC)
+    ```
+    
+    ```
 
 ## Fun facts
 
