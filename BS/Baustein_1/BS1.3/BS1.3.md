@@ -73,10 +73,17 @@ RODC's werden in unsicheren standorten verwendet da auch wenn irgendwie zugriff 
 
 - ## [Credential Cashing Überprüfen](https://learn.microsoft.com/en-us/troubleshoot/windows-server/user-profiles-and-logon/cached-domain-logon-information)
 
-    in dem "**Registry-Editor**" unter dem key:
-    
-    ```Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon```
+    - ### Registry
+        in dem "**Registry-Editor**" unter dem key:
+        
+        ```Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon```
 
-    in der Regel: ```CashedLoginCount```
+        in der Regel: ```CashedLoginCount```
+
+    - ### User und Computer
+        Auf einen beschreibbaren DC unter ```Active Directory Users and Computers/Domain Controllers``` den RODC rechtsklicken und unter Properties oder Eiegnschaften gibt es den Tab Password Replication Policy unter den man für bestimmte Gruppen/User das Credential caching aktivieren kann (die selben User und Gruppen die man auch beim Erstellen des RODCs einstellen kann)
+        screenshot auf DC1-1
+
+        ![RODC Eigenschaftn](.\IMAGES\allowed_credential_cashing.png)
 
 
