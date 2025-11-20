@@ -16,7 +16,6 @@ ende der 1980er: der erste Ansatz einer Firewall
 
 Öffnete den weg für standhaftere Firewalls.
 
----
 
 #### Packetfilter Eigenschaften:
     
@@ -33,8 +32,8 @@ Packetfilter firewalls sind **Stateless**!
 
 - Jedes Packet wird **individuel** inspected
 - keine History von altem Traffic
-    - Stateless firewalls erkennen nicht ob ein eingehendes Packet eine antwort auf eine davor gesendete request ist.
-- filtert nur anhand von einfachen regeln
+    - Stateless firewalls erkennen nicht ob ein eingehendes Packet eine Antwort auf eine davor gesendete Request ist.
+- filtert nur anhand von einfachen Regeln
     - es werden nur IP, Port und Protokol überprüft
 - sehr viel Konfigurationsaufwand bei komplexen Topologien
 
@@ -45,11 +44,11 @@ ACLs *(Paketfilter)* sind einfach und relativ schnell zu konfigurieren. Haben ab
 
 **Bsp:**
 
-Um lokalen ssh zugang als whitelist zu ermöglichen verwenden wir eine ACL die ausgewählte Addressen auf unseren ssh tcp port zuläst und den rest blockiert.
+Um lokalen ssh Zugang als Whitelist zu ermöglichen, verwenden wir eine ACL die ausgewählte Addressen auf unseren ssh tcp port zuläst und den rest blockiert.
 
-<img src="./IMAGES/ACL/Clean_ACL_beispiel_screenshot.png"  width="50%" height="">
+<img src="./IMAGES/ACL/Clean_ACL_beispiel_screenshot.png"  width="60%" height="">
 
-*der rechte router kann nur noch von der addresse 10.0.0.2 via ssh administriert werden.*
+*der rechte Router kann nur noch von der Addresse 10.0.0.2 via ssh administriert werden.*
 
 # Stateful & Cbac
 ### Stateful Firewalls:
@@ -125,5 +124,6 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
 - [illumio.com](https://www.illumio.com/blog/firewall-stateful-inspection)
 - [fortinet.com](https://www.fortinet.com/de/resources/cyberglossary/stateful-firewall)
 - [paubox.com](https://www.paubox.com/blog/what-is-a-stateful-firewall)
-- [geeksforgeeks.org](https://www.geeksforgeeks.org/computer-networks/zone-based-firewall/)
+- [geeksforgeeks.org (ZBF)](https://www.geeksforgeeks.org/computer-networks/zone-based-firewall/)
+- [geeksforgeeks.org (CBAC)](https://www.geeksforgeeks.org/computer-networks/context-based-access-control-cbac/)
 - [cisco.com](https://www.cisco.com/c/de_de/support/docs/unified-communications/unified-border-element/220378-configure-zone-based-firewall-zbfw-co.html)
