@@ -84,6 +84,10 @@ Beinhaltet session Information:
   - Protocol
   - State
 
+#### Cbac
+Cbac ist die Cisco Implementation der Stateful packet inspection
+
+Cbac überprüft neben Layer 3 und 4 auch ein paar Layer 7 Informationen
 
 # Zone based Firewalls
 
