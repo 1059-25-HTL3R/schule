@@ -124,7 +124,6 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
     ```
     ip access-list extended TerminalAccess
      permit tcp host 10.0.0.2 any eq ssh
-     permit tcp any any eq 22
      deny tcp any any
     !
     line vty 0 4
