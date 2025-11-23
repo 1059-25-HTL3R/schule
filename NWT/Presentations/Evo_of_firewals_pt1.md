@@ -8,7 +8,7 @@
 | - | - | - | - |
 | Stateful | nein | ja | ja  |
 |Konf. Aufwand| hoch | mittel | mittel |
-| Anwendung | einfache acces control (Bsp. ssh whitelist) | dynamischer verkehr (Bsp. rückverbindung ermöglichen) | Netzwerk segmentierung (Bsp. unterschiedliche vertrauensberreiche) |
+| Anwendung | einfache acces control (Bsp. ssh whitelist) | dynamischer verkehr (Bsp. rückverbindungen ermöglichen) | Netzwerk segmentierung (Bsp. unterschiedliche vertrauensberreiche) |
 
 ---
 # Packetfilter (ACL's)
@@ -142,8 +142,17 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
 - ### Zone-Based-Firewall
     Zonen erstellen:
     ```
-    
+    zone security INSIDE
+    zone security OUTSIDE
+    zone security DMZ
     ```
+
+    Traffic Klassen erstellen:
+    ```
+    class-map type inspect match-any EXAMPLEMAP
+    match access-group 101
+    ```
+
 
 ## Fun facts
 
