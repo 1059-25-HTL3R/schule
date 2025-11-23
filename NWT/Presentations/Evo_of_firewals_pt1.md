@@ -8,7 +8,7 @@
 | - | - | - | - |
 | Stateful | nein | ja | ja  |
 |Konf. Aufwand| hoch | mittel | mittel |
-| Anwendung | einfache acces control (Bsp. ssh whitelist) | dynamischer verkehr (Bsp. rückverbindungen ermöglichen) | Netzwerk segmentierung (Bsp. unterschiedliche vertrauensberreiche) |
+| Anwendung | einfache acces control (Bsp. ssh whitelist) | dynamischer verkehr (Bsp. rückverbindungen ermöglichen) | Netzwerk Segmentierung (Bsp. unterschiedliche vertrauensberreiche) |
 
 ---
 # Packetfilter (ACL's)
@@ -41,7 +41,7 @@ Packetfilter firewalls sind **Stateless**!
 ---
 #### Funktionsweise
 
-ACLs *(Paketfilter)* sind einfach und relativ schnell zu konfigurieren. Haben aber nur sehr spezielle anwendungen
+ACLs *(Paketfilter)* sind einfach und relativ schnell zu konfigurieren. Haben aber nur sehr spezielle Anwendungen
 
 **Bsp:**
 
@@ -172,7 +172,15 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
     ```
     zone security INSIDE
     zone security OUTSIDE
-    zone security DMZ
+    ```
+
+    Interfaces Zonen zuweisen:
+    ```
+    interface GigabitEthernet0/0
+     zone-member security INSIDE
+    
+    interface GigabitEthernet0/1
+     zone-member security OUTSIDE
     ```
 
     Traffic Klassen erstellen:
