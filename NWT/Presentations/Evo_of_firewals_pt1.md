@@ -14,28 +14,28 @@
 # Packetfilter (ACL's)
 ende der 1980er: der erste Ansatz einer Firewall
 
-Öffnete den weg für standhaftere Firewalls.
+Öffnete den Weg für standhaftere Firewalls.
 
 ---
 
 #### Packetfilter Eigenschaften:
     
-Filtern einzelne Packete anhand einfacher regeln:
+Filtern einzelne Packete anhand einfacher Regeln:
 
 - Source und Destination IP-Adresse
 - Port Nummer
-- Protokol
+- Protokoll
 
 ---
-Packetfilter firewalls sind **Stateless**!
+Packetfilter Firewalls sind **Stateless**!
 
 
 
 - Jedes Packet wird **individuel** inspected
 - keine History von altem Traffic
-    - Stateless firewalls erkennen nicht ob ein eingehendes Packet eine antwort auf eine davor gesendete request ist.
-- filtert nur anhand von einfachen regeln
-    - es werden nur IP, Port und Protokol überprüft
+    - Stateless Firewalls erkennen nicht ob ein eingehendes Packet eine Antwort auf eine davor gesendete Request ist.
+- filtert nur anhand von einfachen Regeln
+    - es werden nur IP, Port und Protokoll überprüft
 - sehr viel Konfigurationsaufwand bei komplexen Topologien
 
 ---
@@ -49,7 +49,7 @@ Um lokalen SSH-Zugang als Whitelist zu ermöglichen, verwenden wir eine ACL, die
 
 <img src="./IMAGES/ACL/Clean_ACL_beispiel_screenshot_fixed2.png"  width="60%" height="">
 
-*der rechte Router (R2) kann nur noch von der addresse 10.0.0.2 via ssh administriert werden.*
+*der rechte Router (R2) kann nur noch von der Adresse 10.0.0.2 via ssh administriert werden.*
 
 # Stateful & Cbac
 ### Stateful Firewalls:
@@ -78,24 +78,24 @@ Client Application startet TCP Verbindung:
 
 ##### State table
 Wird verwendet um zu überprüfen ob Pakete zu einer vorhandenen Session gehören.
-Beinhaltet session Information:
+Beinhaltet Session Information:
   - Source IP
   - Destination IP
   - Protocol
   - State
 
 #### Cbac
-Cbac ist die Cisco Implementation der Stateful packet inspection
+Cbac ist die Cisco Implementation der Stateful Packet Inspection
 
 Cbac überprüft neben Layer 3 und 4 auch ein paar Layer 7 Informationen
 
 # Zone based Firewalls
 
-anfang der 2000er: als Erweiterung der Statefull-Firewalls
+anfang der 2000er: als Erweiterung der Stateful-Firewalls
 
 #### ZBF Eigenschaften:
 - **Zonen**
-    - interfaces werden **genau einer** Zonen zugewiesen.
+    - Interfaces werden **genau einer** Zone zugewiesen.
     - Traffic innerhalb derselben Zone ist standardmäßig erlaubt, zwischen verschiedenen Zonen jedoch standardmäßig verboten, solange kein Zone-Pair existiert.
     --- 
 
@@ -103,7 +103,7 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
 - **Class-Maps**
     
     in der classmap wird festgelegt:
-    - welche Traffic-Typen / Protokolle inspiziert oder gefiltert werden solle (z. B. tcp, udp, http, icmp, usw.)
+    - welche Traffic-Typen / Protokolle inspiziert oder gefiltert werden sollen (z. B. tcp, udp, http, icmp, usw.)
 
     - optional: eine Match-ACL, die Traffic anhand von IP-Adressen/Ports definiert
     (z. B. „nur 10.0.0.0/24 darf über TCP 22“)
