@@ -121,14 +121,26 @@ anfang der 2000er: als Erweiterung der Statefull-Firewalls
 
 ## Config
 - ### Packetfilter *(ACL)*
+    Acces-List:
     ```
-    ip access-list extended TerminalAccess
-     permit tcp host 10.0.0.2 any eq ssh
-     deny tcp any any
-    !
-    line vty 0 4
-     access-class TerminalAccess in
+    Router(config)#ip access-list extended TerminalAccess
+    Router(config-ext-nacl)#permit tcp host 10.0.0.2 any eq 22
+    Router(config-ext-nacl)#deny tcp any any
+    Router(config-ext-nacl)#exit
     ```
+    List auf line geben:
+    ```
+    Router(config)#line vty 0 4 
+    Router(config-line)#access-class TerminalAccess in
+    Router(config-line)#exit
+    ```
+    auf interface:
+    ```
+    Router(config)#interface GigabitEthernet 0/0
+    Router(config-if)#ip access-group TerminalAccess in
+    Router(config-if)#exit
+    ```
+
 
 - ### Stateful FW (CBAC)
     ```
