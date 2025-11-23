@@ -45,11 +45,11 @@ ACLs *(Paketfilter)* sind einfach und relativ schnell zu konfigurieren. Haben ab
 
 **Bsp:**
 
-Um lokalen ssh zugang als whitelist zu ermöglichen verwenden wir eine ACL die ausgewählte Addressen auf unseren ssh tcp port zuläst und den rest blockiert.
+Um lokalen SSH-Zugang als Whitelist zu ermöglichen, verwenden wir eine ACL, die ausgewählte Adressen, die mit TCP Port 22 (SSH) anfragen, zulässt.
 
 <img src="./IMAGES/ACL/Clean_ACL_beispiel_screenshot_fixed2.png"  width="60%" height="">
 
-*der rechte router kann nur noch von der addresse 10.0.0.2 via ssh administriert werden.*
+*der rechte Router (R2) kann nur noch von der addresse 10.0.0.2 via ssh administriert werden.*
 
 # Stateful & Cbac
 ### Stateful Firewalls:
