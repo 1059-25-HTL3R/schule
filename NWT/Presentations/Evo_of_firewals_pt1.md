@@ -94,30 +94,46 @@ Cbac überprüft neben Layer 3 und 4 auch ein paar Layer 7 Informationen
 anfang der 2000er: als Erweiterung der Statefull-Firewalls
 
 #### ZBF Eigenschaften:
-- Zonen
-    - interfaces werden zonen zugewiesen
+- **Zonen**
+    - interfaces werden **genau einer** Zonen zugewiesen.
+    - Traffic innerhalb derselben Zone ist standardmäßig erlaubt, zwischen verschiedenen Zonen jedoch standardmäßig verboten, solange kein Zone-Pair existiert.
+    --- 
 
-- class-map's
+
+- **Class-Maps**
     
-    in der classmap wird bestimmt:
+    in der classmap wird festgelegt:
+    - welche Traffic-Typen / Protokolle inspiziert oder gefiltert werden solle (z. B. tcp, udp, http, icmp, usw.)
 
-    - welche "Typen" an Traffic überprüft werden (Bsp. https, tcp, etc.)
+    - optional: eine Match-ACL, die Traffic anhand von IP-Adressen/Ports definiert
+    (z. B. „nur 10.0.0.0/24 darf über TCP 22“)
 
-    - eine ACL die traffic anhand von addressen zulässt
+    Wichtig: Class-Maps definieren nur welcher Traffic gematcht wird – **nicht** was damit passiert.
     
-- policy-map's
-
-    in der policy map: 
-
-    - werden class-maps angegeben und wie sie behandelt werden
-
-    - was mit dem traffic passiert der nicht in eine angegebene class-map fällt (default: wird drop)
-
-- Zonen-Paare
-
-    in einem Zonen-Paar:
+    --- 
     
-    - wird Traffic von einer Source-Zone in Richtung einer Destination-Zone anhand einer angegebenen policy-map überprüft.
+- **Policy-Maps**
+
+    In einer Policy-Map wird festgelegt:
+
+    - welche Class-Maps angewendet werden, und
+
+    - wie der gematchte Traffic behandelt werden soll:
+      - ```inspect```(zustandsbehaftete Firewall – erlaubt Rückverkehr)
+      - ```pass```(einfach erlauben, ohne Inspektion)
+      - ```drop```(verwerfen)
+    - Was mit nicht gematchtem Traffic passiert
+    (Standard ist drop, wenn nicht anders konfiguriert)
+
+    ---
+
+- **Zonen-Paare**
+
+    In einem Zonen-Paar wird definiert:
+    
+    - von welcher Source-Zone
+    - zu welcher Destination-Zone
+    - welche Policy-Map auf diesen Traffic angewendet wird
 
 ## Config
 - ### Packetfilter *(ACL)*
