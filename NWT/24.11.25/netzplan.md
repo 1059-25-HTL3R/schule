@@ -9,7 +9,7 @@ Border router zu AS2
 
 | interface | IP-Address       |
 | --------- | ---------------- |
-| G0/0      | 172.168.12.1 /24 | ACHTUNG selbes netzt wie bei AS-1-5
+| G0/0      | 172.168.12.1 /24 | ACHTUNG selbes netzt wie bei AS-1-5 |
 | G0/1      | 10.0.12.1 / 24   |
 | LO1       | 1.1.1.1 /32      |
 
@@ -49,6 +49,6 @@ Border router zu AS2
 
 | interface | IP-Address       |
 | --------- | ---------------- |
-| G0/0      | 172.168.12.1 /24 | ACHTUNG selbes netz wie bei AS-1-1
-| G0/1      | 10.0.0.1 / 24    |
-| LO1       | 1.1.1.1 /32      |
+| G0/0      | 172.168.12.1 /24 | ACHTUNG selbes netz wie bei AS-1-1 |
+| G0/1      | 10.0.45.5 /24    |
+| LO1       | 5.5.5.5 /32      |
