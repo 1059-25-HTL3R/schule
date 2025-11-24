@@ -58,40 +58,46 @@ Anfang 2000er zweite Generation von Firewalls:
 #### Stateful Firewalls Eigenschaften
 - Pakete werden nicht mehr isoliert betrachtet, sondern im Zusammenhang mit zuvor gesehenem Traffic
 - Pakete werden als Teile einer Session/Connection zwischen Hosts angesehen
-- Zusammenhänge zwischen den Paketen werden beachtet um die Zugehörigkeit zu einer Connection zu überprüfen
-- Die Stateful Firewall aktualisiert den Status der einzelnen Verbindungen
+- Die Stateful Firewall aktualisiert den Status der einzelnen Connections
 - Nur Pakete die zu gültigen/bestehenden Connections gehören werden zugelassen
 
 #### Funktionsweise:
 
-Stateful Firewalls befinden sich auf Layer 3 und 4 im OSI Modell.
+Stateful Firewalls befinden sich grundsätzlich auf Layer 3 und 4 im OSI Modell. Später wurden sie aufgrund von steigendem Bedarf an Application Layer Security auf Layer 7 Inspection erweitert.
 
 ##### States    
-- Werden vewendet um den Status der Session anzugeben. 
-- Sind Vendor-Spezifisch
-
-**Bsp:**
-Aufbau einer TCP Connection:
-- Die TCP Phasen SYN, SYN-ACK und ACK werden von der Stateful Firewall verwendet um die involvierten Kommunikationspartner zu identifizieren
-- Die Firewall findet während des Handshakes die Informationen über Quelle, Ziel, Reihenfolge der Pakete und Daten innerhalb des Pakets heraus
-- Diese Informationen werden zur Filterung von Paketen verwendet
-- Nach einem TCP Reset (RST) oder Finish (FIN) wird die Connection für die Löschung vorbereitet und alle zukünftigen Pakete der Connection gedropped
+- Werden vewendet um den Status der Session anzugeben
+- Sind platformspezifisch und nicht standardisiert
+- Unterscheiden sich bei Stateful Connection-Oriented Protocols (z.B. TCP) und Stateless Connectionless Protocols (z.B. UDP)
 
 ##### State table
-- Beinhaltet die States von den unterschiedlichen Sessions.
+- Beinhaltet die States von den der Firewall bekannten Sessions.
 - Wird verwendet um zu überprüfen ob Pakete zu einer vorhandenen Session gehören.
-- Beinhaltet Session Informationen:
+- Beinhaltet Session Informationen wie u.a.:
   - Source IP
   - Destination IP
   - Protocol
-  - Ports
-  - Current State of Connection
+  - Sequence- and ACK Number
+  - Source und Destination Port
+  - State
+
+**Bsp. Stateful Connection-Oriented Protocol:**
+Aufbau einer TCP Connection:
+- Die TCP-Flags SYN, SYN-ACK und ACK werden von der Stateful Firewall ausgewertet, um den Verbindungsaufbau zu erkennen und den entsprechenden Firewall-State zu setzen. 
+- Die Firewall findet während des Handshakes die Informationen über Quelle, Ziel, Reihenfolge der Pakete und Daten innerhalb des Pakets heraus
+- Diese Informationen werden in dem State Table gespeichert und sorgen dafür, dass nur Pakete zugelassen werden, die zu einer gültigen, bestehenden Session gehören.
+- Nach dem Empfang eines TCP Reset (RST) oder Finish (FIN) wird die Session als beended markiert, der Eintrag aus dem State Table entfernt und spätere Pakete der Connection verworfen
+
+**Bsp. Stateless Connectionless Protocol:**
+Aufbau einer UDP Session:
+- UDP hat keine Flags und Sequencenumbers wie TCP. 
+
+
 
 #### Cbac
-Cbac ist die Cisco Implementation der Stateful Packet Inspection
+Cbac stellt eine Cisco Implementation der Stateful Packet Inspection dar
 
-- Cbac überprüft neben Layer 3 und 4 auch Layer 7 Informationen
-- 
+- Cbac verfügt neben Layer 3 und 4 auch eingeschränkte Protokoll-spezifische Layer 7 Inspection
 
 # Zone based Firewalls
 
@@ -207,3 +213,4 @@ anfang der 2000er: als Erweiterung der Stateful-Firewalls
 - [geeksforgeeks.org (cbac)](https://www.geeksforgeeks.org/computer-networks/context-based-access-control-cbac/)
 - [cisco.com](https://www.cisco.com/c/de_de/support/docs/unified-communications/unified-border-element/220378-configure-zone-based-firewall-zbfw-co.html)
 - [cisco.com (cbac)](https://www.cisco.com/c/en/us/td/docs/ios/sec_data_plane/configuration/guide/12_4/sec_data_plane_12_4_book/sec_cfg_content_ac.pdf)
+- [cisco.com (stateful firewall)](https://www.cisco.com/c/en/us/td/docs/wireless/asr_5000/21-26/psf-admin/21-26-psf-admin/21-16-PSF-Admin_chapter_01.html)
