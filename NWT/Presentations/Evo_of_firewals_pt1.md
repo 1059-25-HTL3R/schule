@@ -90,9 +90,12 @@ Aufbau einer TCP Connection:
 
 **Bsp. Stateless Connectionless Protocol:**
 Aufbau einer UDP Session:
-- UDP hat keine Flags und Sequencenumbers wie TCP. 
-
-
+- UDP hat keine Flags und Sequencenumbers wie TCP.
+- Zusätzlich können sich die Portnummern in einem UDP-Datenfluss innerhalb einer Session zufällig ändern (dynamische Ports).
+- Deshalb werden IP-Adressen inspected
+- UDP braucht ICMP zur Fehlerrückmeldung (z.B. Port unreachable)
+- Die Stateless Firewall verwendet die ICMP-Meldungen um den State der UDP-Session zu erkennen/setzen und ihre Gültigkeit zu bestätigen
+- Die Firewall erkennt bei UDP nicht wann die Session zu Ende ist, deshalb wird ein Timeout gesetzt, nach dessen Ablauf der UDP-Session Eintrag aus dem State Table gelöscht wird
 
 #### Cbac
 Cbac stellt eine Cisco Implementation der Stateful Packet Inspection dar
