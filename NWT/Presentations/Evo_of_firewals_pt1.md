@@ -187,7 +187,7 @@ anfang der 2000er: als Erweiterung der Stateful-Firewalls
      zone-member security OUTSIDE
     ```
 
-    Traffic Klassen erstellen:
+    Class-Maps erstellen:
     ```
     class-map type inspect match-any EXAMPLEMAP
     match access-group 101
