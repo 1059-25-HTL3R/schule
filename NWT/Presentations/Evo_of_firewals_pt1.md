@@ -20,7 +20,7 @@ ende der 1980er: der erste Ansatz einer Firewall
 
 #### Packetfilter Eigenschaften:
     
-Filtern einzelne Packete anhand einfacher Regeln:
+Filtern einzelne Pakete anhand einfacher Regeln:
 
 - Source und Destination IP-Adresse
 - Port Nummer
@@ -56,25 +56,25 @@ Um lokalen SSH-Zugang als Whitelist zu ermöglichen, verwenden wir eine ACL, die
 Anfang 2000er zweite Generation von Firewalls:
 
 #### Stateful Firewalls Eigenschaften
-- Pakete werden nicht mehr generell als alleinstehnd angesehen
-- Pakete werden als Teile eines größeren Austausches zwischen Hosts betrachtet
-- Zustände der Verbindungen werden überwacht
-- Kontext des Traffic wird ermittelt und zwischengespeichert
-- Zusammenhänge zwischen den Packeten werden beachtet
+- Pakete werden nicht mehr isoliert betrachtet, sondern im Zusammenhang mit zuvor gesehenem Traffic
+- Pakete werden als Teile einer Session/Connection zwischen Hosts angesehen
+- Zusammenhänge zwischen den Paketen werden beachtet um die Zugehörigkeit zu einer Connection zu überprüfen
+- Die Stateful Firewall aktualisiert den Status der einzelnen Verbindungen
+- Nur Pakete die zu gültigen/bestehenden Connections gehören werden zugelassen
 
 #### Funktionsweise:
+
+Stateful Firewalls befinden sich auf Layer 3 und 4 im OSI Modell.
+
 ##### States    
 Werden vewendet um den Status der Session anzugeben.
 
 **Bsp:**
-Client Application startet TCP Verbindung:
-- bei TCP werden die 4 bits SYN,ACK,RST,FIN zur Bestimmung vom State verwendet
-- TCP SYN Flag wird beim Start der Verbindung gesetzt
-- Firewall erkennt das Flag und setzt State auf NEW
-- Danach kommt die Antwort vom Server mit TCP SYN + ACK Flags
-- Firewall setzt nun Connection State auf ESTABLISHED, da nun von beiden Richtungen Pakete erkannt wurden
-- Nun folgt TCP RST oder FIN + ACK Flags
-- Firewall bereitet State für Löschung vor
+Aufbau einer TCP Connection:
+- Die TCP Phasen SYN, SYN-ACK und ACK werden von der Stateful Firewall verwendet um die involvierten Kommunikationspartner zu identifizieren
+- Die Firewall findet während des Handshakes die Informationen über Quelle, Ziel, Reihenfolge der Pakete und Daten innerhalb des Pakets heraus
+- Diese Informationen werden zur Filterung von Paketen verwendet
+- Nach einem TCP Reset (RST) oder Finish (FIN) wird die Connection für die Löschung vorbereitet und alle zukünftigen Pakete der Connection gedropped
 
 ##### State table
 Wird verwendet um zu überprüfen ob Pakete zu einer vorhandenen Session gehören.
@@ -82,7 +82,7 @@ Beinhaltet Session Information:
   - Source IP
   - Destination IP
   - Protocol
-  - State
+  - Current State of Connection
 
 #### Cbac
 Cbac ist die Cisco Implementation der Stateful Packet Inspection
