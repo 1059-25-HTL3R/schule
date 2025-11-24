@@ -67,7 +67,8 @@ Anfang 2000er zweite Generation von Firewalls:
 Stateful Firewalls befinden sich auf Layer 3 und 4 im OSI Modell.
 
 ##### States    
-Werden vewendet um den Status der Session anzugeben.
+- Werden vewendet um den Status der Session anzugeben. 
+- Sind Vendor-Spezifisch
 
 **Bsp:**
 Aufbau einer TCP Connection:
@@ -77,17 +78,20 @@ Aufbau einer TCP Connection:
 - Nach einem TCP Reset (RST) oder Finish (FIN) wird die Connection für die Löschung vorbereitet und alle zukünftigen Pakete der Connection gedropped
 
 ##### State table
-Wird verwendet um zu überprüfen ob Pakete zu einer vorhandenen Session gehören.
-Beinhaltet Session Information:
+- Beinhaltet die States von den unterschiedlichen Sessions.
+- Wird verwendet um zu überprüfen ob Pakete zu einer vorhandenen Session gehören.
+- Beinhaltet Session Informationen:
   - Source IP
   - Destination IP
   - Protocol
+  - Ports
   - Current State of Connection
 
 #### Cbac
 Cbac ist die Cisco Implementation der Stateful Packet Inspection
 
-Cbac überprüft neben Layer 3 und 4 auch ein paar Layer 7 Informationen
+- Cbac überprüft neben Layer 3 und 4 auch Layer 7 Informationen
+- 
 
 # Zone based Firewalls
 
@@ -120,7 +124,7 @@ anfang der 2000er: als Erweiterung der Stateful-Firewalls
 
     - wie der gematchte Traffic behandelt werden soll:
       - ```inspect```(zustandsbehaftete Firewall – erlaubt Rückverkehr)
-      - ```pass```(einfach erlauben, ohne Inspektion)
+      - ```pass```(einfach erlauben, ohne Inspection)
       - ```drop```(verwerfen)
     - Was mit nicht gematchtem Traffic passiert
     (Standard ist drop, wenn nicht anders konfiguriert)
