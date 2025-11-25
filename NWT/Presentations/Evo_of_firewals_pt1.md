@@ -1,6 +1,6 @@
 # Evolution of firewalls Pt.1
 
-#### Jan Willimek, Benjamin Zwettler
+#### Jan Wilimek, Benjamin Zwettler
 
 ## Überblick
 
@@ -8,7 +8,7 @@
 | - | - | - | - |
 | Stateful | nein | ja | ja  |
 |Konf. Aufwand| hoch | mittel | mittel |
-| Anwendung | einfache acces control (Bsp. ssh whitelist) | dynamischer verkehr (Bsp. rückverbindungen ermöglichen) | Netzwerk Segmentierung (Bsp. unterschiedliche vertrauensberreiche) |
+| Anwendung | einfache access control (Bsp. ssh whitelist) | dynamischer Verkehr (Bsp. Rückverbindungen ermöglichen) | Netzwerk Segmentierung (Bsp. unterschiedliche Vertrauensberreiche) |
 
 ---
 # Packetfilter (ACL's)
@@ -45,7 +45,7 @@ ACLs *(Paketfilter)* sind einfach und relativ schnell zu konfigurieren. Haben ab
 
 **Bsp:**
 
-Um lokalen SSH-Zugang als Whitelist zu ermöglichen, verwenden wir eine ACL, die ausgewählte Adressen, die mit TCP Port 22 (SSH) anfragen, zulässt.
+Um lokalen SSH-Zugang als Whitelist zu ermöglichen, verwenden wir eine ACL, die ausgewählte Adressen, die mit TCP Port 22 (SSH) Anfragen, zulässt.
 
 <img src="./IMAGES/ACL/Clean_ACL_beispiel_screenshot_fixed2.png"  width="60%" height="">
 
@@ -97,10 +97,14 @@ Aufbau einer UDP Session:
 - Die Stateless Firewall verwendet die ICMP-Meldungen um den State der UDP-Session zu erkennen/setzen und ihre Gültigkeit zu bestätigen
 - Die Firewall erkennt bei UDP nicht wann die Session zu Ende ist, deshalb wird ein Timeout gesetzt, nach dessen Ablauf der UDP-Session Eintrag aus dem State Table gelöscht wird
 
-#### Cbac
+#### Cbac (Context-Based Access Control)
 Cbac stellt eine Cisco Implementation der Stateful Packet Inspection dar
 
 - Cbac verfügt neben Layer 3 und 4 auch eingeschränkte Protokoll-spezifische Layer 7 Inspection
+- Cbac öffnet Ports dynamisch und schließt sie nach Ende der Session wieder 
+- Es arbeitet mit ACLs welche Inbound am Interface und Inspection Classes, welche Outbound konfiguriert werden.
+
+
 
 # Zone based Firewalls
 
@@ -150,7 +154,7 @@ anfang der 2000er: als Erweiterung der Stateful-Firewalls
 
 ## Config
 - ### Packetfilter *(ACL)*
-    Acces-List:
+    Access-List:
     ```
     Router(config)#ip access-list extended TerminalAccess
     Router(config-ext-nacl)#permit tcp host 10.0.0.2 any eq 22
