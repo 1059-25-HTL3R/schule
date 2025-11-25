@@ -177,11 +177,16 @@ anfang der 2000er: als Erweiterung der Stateful-Firewalls
 
 - ### Stateful FW (CBAC)
     ```
+    ip access-list extended 100
+     permit ospf any any 
+     deny ip any any
     ip inspect name MY-CBAC http
     ip inspect name MY-CBAC ftp
     interface GigabitEthernet0/0
+     ip access-group 100 in
      ip inspect MY-CBAC out
      
+
     ```
 
 - ### Zone-Based-Firewall
@@ -200,12 +205,30 @@ anfang der 2000er: als Erweiterung der Stateful-Firewalls
      zone-member security OUTSIDE
     ```
 
+    Access-List erstellen:
+    ```
+    access-list 101 permit ip any any
+    ```
+
     Class-Maps erstellen:
     ```
     class-map type inspect match-any EXAMPLEMAP
     match access-group 101
     ```
 
+    Policy-Maps erstellen:
+    ```
+    policy-map type inspect inside-outside-pmap
+     class type inspect EXAMPLMAP
+      inspect
+     class class-default
+    ```
+
+    Zone-Pair erstellen:
+    ```
+    zone-pair security inside-out source INSIDE destination OUTSIDE
+     service-policy type inspect inside-outside-pmap
+    ```
 
 ## Fun facts
 
