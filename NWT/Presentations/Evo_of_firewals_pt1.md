@@ -63,7 +63,7 @@ Anfang 2000er zweite Generation von Firewalls:
 
 #### Funktionsweise:
 
-Stateful Firewalls befinden sich grundsätzlich auf Layer 3 und 4 im OSI Modell. Später wurden sie aufgrund von steigendem Bedarf an Application Layer Security auf Layer 7 Inspection erweitert.
+Stateful Firewalls befinden sich grundsätzlich auf Layer 3 und 4 im OSI Modell. Später wurden sie aufgrund von steigendem Bedarf an Application Layer Security auf Layer 7 Inspection erweitert (führte in weiterer Folge zu UTM Systemen).
 
 ##### States    
 - Werden vewendet um den Status der Session anzugeben
