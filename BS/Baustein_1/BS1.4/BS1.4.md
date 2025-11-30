@@ -25,12 +25,60 @@ Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansi
 | NAT-Interface| DHCP        | - |
 
 - ### Konfiguration
+    - **ansible Instalieren:**
+
+        wir verwenden eine ubuntu VM als control node.
+
+        ansible benutzt ein PPA (Personal Package Archive).
+
+        PPA zu repos hinzufügen:
+        ```
+        sudo apt update
+        sudo apt install software-properties-common
+        sudo add-apt-repository --yes --update ppa:ansible/ansible
+        ```
+        ansible instalieren:
+        ```
+        sudo apt install ansible
+        ```
+
+        [Quelle](https://docs.ansible.com/projects/ansible/latest/installation_guide/installation_distros.html)
+    ---
+
+    - **ansible konfigurieren:**
+    
+        konfig file:
+        ```
+        /etc/ansible/ansible.conf
+        ```
+        
+
+
+
+
+
+## Ansible Playbooks
+- ### Grundkonfiguration von servern
+    
+    was muss konfiguriert werden?
+    - Hostname
+    - interfaces
+        - mindestens ein Interface muss konfiguriert sein damit ansible das gerät konfigurieren kann.
+    - User?
+    - 
+
+
     
 
 
 ## Keywords
-    - module
-    - task
-    - template
-    - playbook
-    - plugin
+- **playbook**
+    
+    Ein Bauplan in ```yaml``` geschrieben.
+
+
+    [Quelle](https://docs.ansible.com/projects/ansible/latest/playbook_guide/index.html)
+- **task**
+- **module**    
+- **template**
+- **plugin**
