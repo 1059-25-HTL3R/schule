@@ -9,6 +9,8 @@ Ziel: Ein anderer Schüler soll die Schritte nachmachen können, ohne die Instal
 
 ## 1. Lab-Überblick
 
+![image](./IMAGES/netzplan.png)
+
 Wir verwenden vier virtuelle Maschinen im gleichen Subnetz:
 
 - DC01 – Domain Controller
@@ -23,8 +25,6 @@ IP-Adressen:
 - SRV1.corp.example.com: 192.168.1.13/24  
 - WIN01.corp.example.com: 192.168.1.14/24
 
-Screenshot: kleines Netzdiagramm (4 VMs, IPs, Rollen).
-
 ---
 
 ## 2. DC01 vorbereiten (Active Directory + DNS)
@@ -34,6 +34,7 @@ Screenshot: kleines Netzdiagramm (4 VMs, IPs, Rollen).
 1. Computername ändern auf DC01
 2. IP-Adressen konfigurieren wie oben geschrieben
 3. neustarten
+   
 ![image](./IMAGES/DC01_IP.png)
 
 ### 2.2 Forest/Domain corp.example.com erstellen
@@ -42,7 +43,7 @@ Screenshot: kleines Netzdiagramm (4 VMs, IPs, Rollen).
 2. Domain = corp.example.com
 3. neustarten
 
----
+
 
 ## 3. SRV1 vorbereiten (IIS / HTTP CDP & AIA)
 
@@ -52,6 +53,8 @@ Screenshot: kleines Netzdiagramm (4 VMs, IPs, Rollen).
 2. Computername ändern
 3. domain joinen
 4. neustarten und dann mit dem Domain Admin anmelden
+
+![image](./IMAGES/SRV1_IP.png)
 
 ### 3.2 IIS Webserver installieren
 
@@ -68,7 +71,9 @@ Screenshot: kleines Netzdiagramm (4 VMs, IPs, Rollen).
 3. Reiter `Security` → `Bearbeiten`:
    - `corp\Cert Publishers` hinzufügen → „Change“ erlauben.
 
-Screenshot: Freigabeberechtigungen von CertEnroll.
+![image](./IMAGES/SRV1_CertEnroll_Security.png)
+
+![image](./IMAGES/SRV1_CertEnroll_Share.png)
 
 ### 3.4 Virtuelles Verzeichnis in IIS anlegen
 
@@ -78,7 +83,8 @@ Screenshot: Freigabeberechtigungen von CertEnroll.
    Physikalischer Pfad: `C:\CertEnroll`.
 4. Danach in IIS auf `CertEnroll` → `Verzeichnisdurchsuchung` → `Aktivieren`.
 
-Screenshot: IIS mit CertEnroll-Verzeichnis.
+![image](./IMAGES/SRV1_CertEnroll_DB.png)
+
 
 ### 3.5 Double Escaping aktivieren (für Delta-CRLs)
 
@@ -90,6 +96,8 @@ Screenshot: IIS mit CertEnroll-Verzeichnis.
    iisreset
    ```
 
+![image](./IMAGES/SRV1_CertEnroll_DE.png)
+
 Screenshot: CMD mit erfolgreichem `appcmd`-Output.
 
 ### 3.6 DNS-Alias pki.corp.example.com erstellen
@@ -99,7 +107,7 @@ Screenshot: CMD mit erfolgreichem `appcmd`-Output.
 3. Aliasname: `pki`  
    FQDN des Zielhosts: `SRV1.corp.example.com.` (Punkt am Ende nicht vergessen).
 
-Screenshot: CNAME pki.corp.example.com.
+![image](./IMAGES/DC01_DNS_Alias.png)
 
 ---
 
@@ -111,7 +119,7 @@ Screenshot: CNAME pki.corp.example.com.
 2. Computername ändern + domain joinen
 3. neustarten und dann mit dem Domain Admin anmelden
 
-Screenshot: CA01 in der Domäne.
+![image](./IMAGES/CA01_IP.png)
 
 ### 4.2 CAPolicy.inf anlegen
 
@@ -139,8 +147,6 @@ AlternateSignatureAlgorithm=1
 
 2. Sicherstellen, dass die Datei wirklich `CAPolicy.inf` heißt (.inf, nicht .txt).
 
-Screenshot: Notepad mit CAPolicy.inf.
-
 ### 4.3 Enterprise Root CA installieren
 
 1. Server-Manager auf CA01 öffnen → `Rollen` → `Rollen hinzufügen`.
@@ -154,7 +160,7 @@ Screenshot: Notepad mit CAPolicy.inf.
 9. Gültigkeitsdauer: `10` Jahre.
 10. Standardpfade für DB/Log beibehalten, installieren.
 
-Screenshot: Dialog „CA-Namen konfigurieren“.
+![image](./IMAGES/CA01_Cert_Install.png)
 
 ---
 
@@ -203,7 +209,7 @@ Dann in der lokalen Sicherheitsrichtlinie:
 2. `Lokale Richtlinien` → `Überwachungsrichtlinie`.
 3. `Überwachung des Objektzugriffs` → Erfolg + Fehler aktivieren.
 
-Screenshot: Richtlinie „Überwachung des Objektzugriffs“.
+![image](./IMAGES/CA01_Audit.png)
 
 ---
 
@@ -218,7 +224,7 @@ certutil -setreg CA\CACertPublicationURLs ^
 certutil -getreg CA\CACertPublicationURLs
 ```
 
-Screenshot: certutil-Ausgabe und ggf. CA-Eigenschaften → Erweiterungen → AIA.
+![image](./IMAGES/CA01_AIA.png)
 
 ### 6.2 CDP (CRL Distribution Point)
 
@@ -229,7 +235,7 @@ certutil -setreg CA\CRLPublicationURLs ^
 certutil -getreg CA\CRLPublicationURLs
 ```
 
-Screenshot: CA-Eigenschaften → Erweiterungen → CDP.
+![image](./IMAGES/CA01_CDP.png)
 
 ### 6.3 CA-Zertifikat und CRL veröffentlichen
 
@@ -252,7 +258,7 @@ Dann in `certsrv.msc`:
 2. Computername ändern + domain joinen 
 3. neustarten und dann mit dem Domain Admin anmelden
 
-Screenshot: WIN01 als Mitglied der Domäne.
+![image](./IMAGES/WIN01_IP.png)
 
 ---
 
@@ -267,7 +273,7 @@ Auf CA01:
 3. Prüfen, dass CA-Zertifikat, AIA-URLs und CDP-URLs alle Status „OK“ anzeigen.
 4. Auf `Enterprise PKI` rechtsklicken und dann über „Manage AD Containers“ die Einträge für NTAuth, AIA, CDP etc. kontrollieren.
 
-Screenshot: PKIView mit allen Einträgen auf OK.
+![image](./IMAGES/CA01_Enterprise_PKI.png)
 
 ### 8.2 Testzertifikat einschreiben und prüfen
 
@@ -283,7 +289,7 @@ Auf WIN01:
 2. Unter `Persönlich` → `Zertifikate` → Rechtsklick → `Alle Tasks` → `Neues Zertifikat anfordern`.
 3. „Active Directory-Richtlinie“ verwenden, „Workstation Authentication“ auswählen, einschreiben.
 
-Screenshot: Erfolgreicher Abschluss des Zertifikatsanforderungsassistenten.
+![image](./IMAGES/WIN01_Zertifikat.png)
 
 Zertifikat exportieren und prüfen:
 
@@ -298,6 +304,11 @@ certutil -url C:\win01.cer
 3. Zuerst „CRLs (from CDP)“ → `Retrieve` → Status sollte „Verified“ sein.
 4. Dann „Certs (from AIA)“ → `Retrieve` → ebenfalls „Verified“.
 5. Danach:
+
+![image](./IMAGES/WIN01_CDP_abgerufen.png)
+
+
+![image](./IMAGES/WIN01_AIA_abrufen.png)
 
 ```
 certutil -verify -urlfetch C:\win01.cer

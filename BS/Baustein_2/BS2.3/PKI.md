@@ -41,6 +41,7 @@ Damit kannst du Templates editieren und später auf der CA veröffentlichen.
 
 3. Template speichern.
 
+![image](./IMAGES/CA01_Webserver_Template.png)
 ***
 
 ## 3. User-Template anpassen
@@ -59,6 +60,10 @@ Damit kannst du Templates editieren und später auf der CA veröffentlichen.
    - **Security**:
      - Falls die Gruppe (`Domain user`) noch nicht in Security ist, dann diese hinzufügen und **Enroll** vergeben.  
 
+3. Template speichern
+
+![image](./IMAGES/CA01_User_Template.png)
+
 ***
 
 ## 4. Key Recovery Agent-Template anpassen
@@ -73,6 +78,9 @@ Damit kannst du Templates editieren und später auf der CA veröffentlichen.
    - **Security**:
      - Den User `Corp KRA` hinzufügen und ihm die Permission Enroll geben.  
 
+3. Template speichern
+
+![image](./IMAGES/CA01_KRA_Template.png)
 ***
 
 ## 5. Templates auf der CA veröffentlichen
@@ -84,6 +92,8 @@ Damit kannst du Templates editieren und später auf der CA veröffentlichen.
    - `Corp User` 
    - KRA-Template (Standard **Key Recovery Agent**) für Key Archival.   
 4. Mit OK bestätigen.
+
+![image](./IMAGES/CA01_Templates.png)
 
 Achte darauf, dass die Berechtigungen auf den Templates mit deinen Gruppen/Serverobjekten zusammenpassen, damit Enrollment funktioniert.
 
@@ -111,6 +121,8 @@ Auf `CA01` (IIS-Server):
    - Template **Corp WebServer** auswählen.  
    - Request abschließen, warten bis das Zertifikat als **Issued** in `Personal\Certificates` erscheint.
 
+![image](./IMAGES/CA01_Server_Zertifikat.png)
+
 Das ausgestellte Zertifikat sollte im Subject/SAN den FQDN wie `CA01.corp.example.com` enthalten.
 
 ***
@@ -130,7 +142,9 @@ Auf `CA01`:
    - **SSL certificate**: das zuvor ausgestellte `Corp WebServer`-Zertifikat auswählen.  
 5. Mit OK und Close bestätigen.
 
-Jetzt ist die Web Enrollment Site per HTTPS über FQDN erreichbar, z.B. `https://CA01.corp.example.com/certsrv`. Den FQDN kannst du in der Domain-Policy ggf. in die geeignete Zone (Trusted Sites / Intranet) aufnehmen, damit integrierte Authentifizierung sauber funktioniert.
+![image](./IMAGES/CA01_Bindings.png)
+
+Jetzt ist die Web Enrollment Site per HTTPS über FQDN erreichbar, z.B. `https://CA01.corp.example.com/certsrv`.
 
 ***
 
@@ -145,6 +159,8 @@ Aus Sicht eines KRA-Benutzers (z.B. `Corp\corp-KRA`):
 5. Option **Mark keys as exportable** aktivieren (wichtig für spätere Sicherung).  
 6. Optional Friendly Name setzen, z.B. `KRA Cert`.  
 7. Request abschicken.
+
+![image](./IMAGES/WIN01_KRA_Request.png)
 
 Der Request landet als **Pending Request** auf der CA, da das Standard-KRA-Template in der Regel „Manager approval“ verlangt.
 
