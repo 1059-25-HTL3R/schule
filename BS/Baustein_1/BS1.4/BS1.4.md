@@ -3,10 +3,18 @@
 ## Ansible
 <img src="./IMAGES/Ansible_logo.svg.png"  width="40%" height="30%">
 
-## Plan
-wir wollen [ansible](https://docs.ansible.com/) lernen aufzusetzen und damit Linux server aufsetzen und konfigurieren.
+## Aufgabe
+Lab: Richte eine grundlegende Ansible Testumgebung, bestehend aus Linux Systemen, ein. 
+- Grundkonfiguration
+- Konfiguration eines DHCP Servers 
+- Konfiguration eines DNS Servers 
+-  Firewall-Konfiguration
+Konfiguration von statischem Routing
 
-Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansible/latest/network/getting_started/basic_concepts.html#control-node) die als orchestrator agiert. (einen PC / Server der alle anderen nodes ansteuert und via ssh oder winrm (bei windows clients)).
+## Plan
+wir wollen [ansible](https://docs.ansible.com/) aufzusetzen um damit schnell Linux server aufsetzen und konfigurieren.
+
+Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansible/latest/network/getting_started/basic_concepts.html#control-node) die als orchestrator agiert. (einen PC / Server der alle anderen nodes ansteuert und via ssh oder winrm (bei windows clients) konfiguriert).
 
 
 
@@ -19,3 +27,10 @@ Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansi
 - ### Konfiguration
     
 
+
+## Keywords
+    - module
+    - task
+    - template
+    - playbook
+    - plugin
