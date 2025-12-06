@@ -140,11 +140,7 @@ Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansi
     ```
     ansible-vault create vault.yml
     ```
-
-    in die gerade erstellte "vault.yml" das passwort schreiben:
-    ```
-    vault_sudo_password: "junioradmin"
-    ```
+    NICHT VERGESSEN ANSIBLE RESERVED variables zu beschreiben.
 
     
     [Quelle](https://docs.ansible.com/projects/ansible/latest/vault_guide/vault.html)
