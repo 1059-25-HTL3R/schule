@@ -51,6 +51,8 @@ Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansi
         ```
         /etc/ansible/ansible.conf
         ```
+
+        ssh conection + ssh key übertragen + ssh auf remote aufsetzen
         
 
 
@@ -59,14 +61,62 @@ Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansi
 
 ## Ansible Playbooks
 - ### Grundkonfiguration von servern
-    
+
     was muss konfiguriert werden?
     - Hostname
     - interfaces
         - mindestens ein Interface muss konfiguriert sein damit ansible das gerät konfigurieren kann.
-    - User?
-    - 
+    - packes upgraden
+    
+    - firewall?
 
+    ### Das Inventory File:
+    das inventory file ist dafür da die zu bearbeitenden hosts zu listen.
+
+    ### Das Vault File:
+    sensible daten wie Passwörter sollten nicht in klartext abgespeichert werden. Ansible bietet hierfür sogenannte "Vaults" an die die Passwörter verschlüsselt abspeichern und nur wärend dem ausführen entschlüsselt werden.
+
+    **command zum erstellen eines vaults:**
+    ```
+    ansible-vault create <pfad zum erstellen>
+    ```
+    dannach muss mein ein vault passwort eingeben mit dem der vault verschlüsselt wird
+
+    **command zum bearbeiten:**
+    ```
+    ansible-vault edit <pfad zum file>
+    ```
+    das vault passwort muss einggeben werde um das file zu bearbeiten
+
+
+
+    ### Das Playbook:
+    ```
+    - name: My first play
+    hosts: server_linux
+    become: true
+
+    vars_files:
+    - vault.yml
+  
+    tasks:
+    - name: Ping my hosts
+     ansible.builtin.ping:
+
+    - name: Print message
+     ansible.builtin.debug:
+       msg: Hello world
+       
+    - name: Set a hostname
+     ansible.builtin.hostname:
+       name: "{{ hostname }}"
+    ```
+    *dieses Playbook pingt alle hosts aus der gruppe "server_linux", gibt dann eine debug message aus und ändert den hostname von allen hosts zu den hostnames die im inventory file mit der variable hostname abgespeichert sind.*
+
+    ### Der Command zum ausführen:
+    ```
+    ansible-playbook -i <path zum inventory file> <path zum playbook file> --ask-vault-pass
+    ```
 
     
 
@@ -82,3 +132,19 @@ Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansi
 - **module**    
 - **template**
 - **plugin**
+- **vaults**
+    
+    vaulst speichert sensible daten wie passwörter oder adminkonten gesichert ab.
+
+    create vault:
+    ```
+    ansible-vault create vault.yml
+    ```
+
+    in die gerade erstellte "vault.yml" das passwort schreiben:
+    ```
+    vault_sudo_password: "junioradmin"
+    ```
+
+    
+    [Quelle](https://docs.ansible.com/projects/ansible/latest/vault_guide/vault.html)
