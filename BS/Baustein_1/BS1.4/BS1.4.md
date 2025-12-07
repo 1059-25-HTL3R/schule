@@ -8,8 +8,8 @@ Lab: Richte eine grundlegende Ansible Testumgebung, bestehend aus Linux Systemen
 - Grundkonfiguration
 - Konfiguration eines DHCP Servers 
 - Konfiguration eines DNS Servers 
--  Firewall-Konfiguration
-Konfiguration von statischem Routing
+- Firewall-Konfiguration
+- Konfiguration von statischem Routing
 
 ## Plan
 wir wollen [ansible](https://docs.ansible.com/) aufzusetzen um damit schnell Linux server aufsetzen und konfigurieren.
@@ -19,10 +19,6 @@ Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansi
 
 
 ## Control-Node
-| interface    | ip          | lan segment|
-| ------------ | ----------- | ---------- |
-| Ethernet1    | 192.168.2.2 | Lan_2-1    |
-| NAT-Interface| DHCP        | - |
 
 - ### Konfiguration
     - **ansible Instalieren:**
@@ -51,9 +47,42 @@ Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansi
         ```
         /etc/ansible/ansible.conf
         ```
+        *hier müssen nicht umbeding änderungen vorgenommen werden*
 
-        ssh conection + ssh key übertragen + ssh auf remote aufsetzen
-        
+
+---
+
+## Target-Node(s)
+
+Target server/nodes müssen nur eine ssh verbindung mir der Control node aufbauen können damit ansible die konfiguration des jeweiligen servers übernehmen kann.
+
+### best practice:
+- ssh instalieren und den ssh-Schlüssel von der Control node auf den Target Server spielen.
+
+    mit dem Command:
+    ```
+    ssh-copy-id <Target-IP>
+    ```
+---
+
+## Sudo commands:
+
+manche Befehle benötigen root Rechte um ausgeführt werden zu können
+
+- *Beispiel: der Command zum ändern des hostnames.*
+
+Doch da ein root level login über ssh einige Sicherheits-Risiken aufbringt verwenden wir: **ansible Vaults**
+
+---
+
+- ### ansible Vaults:
+    ein ansible vault speichert sensible daten gesichert ab.
+
+    [Wichtige info](https://serverfault.com/questions/560106/how-can-i-implement-ansible-with-per-host-passwords-securely)
+
+
+
+
 
 
 
@@ -62,16 +91,16 @@ Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansi
 ## Ansible Playbooks
 - ### Grundkonfiguration von servern
 
-    was muss konfiguriert werden?
-    - Hostname
-    - interfaces
-        - mindestens ein Interface muss konfiguriert sein damit ansible das gerät konfigurieren kann.
-    - packes upgraden
-    
-    - firewall?
-
     ### Das Inventory File:
     das inventory file ist dafür da die zu bearbeitenden hosts zu listen.
+
+    inventory file:
+    ```
+    [server_linux]
+    192.168.19.145 hostname=AnsibleTarget1
+    ```
+    *speichert ab welche hosts in der Gruppe "server_linux sind der erste server hat eine variable mit seinem hostname*
+
 
     ### Das Vault File:
     sensible daten wie Passwörter sollten nicht in klartext abgespeichert werden. Ansible bietet hierfür sogenannte "Vaults" an die die Passwörter verschlüsselt abspeichern und nur wärend dem ausführen entschlüsselt werden.
@@ -90,7 +119,7 @@ Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansi
 
 
 
-    ### Das Playbook:
+    ### Das Playbook für die Grundkonfiguration:
     ```
     - name: My first play
     hosts: server_linux
@@ -110,8 +139,17 @@ Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansi
     - name: Set a hostname
      ansible.builtin.hostname:
        name: "{{ hostname }}"
+    
+    - name: Update all packages to their latest version
+     ansible.builtin.apt:
+       name: "*"
+       state: latest
+
+   - name: Upgrade the OS (apt-get dist-upgrade)
+     ansible.builtin.apt:
+       upgrade: dist
     ```
-    *dieses Playbook pingt alle hosts aus der gruppe "server_linux", gibt dann eine debug message aus und ändert den hostname von allen hosts zu den hostnames die im inventory file mit der variable hostname abgespeichert sind.*
+    *dieses Playbook pingt alle hosts aus der gruppe "server_linux", gibt dann eine debug message aus und ändert den hostname von allen hosts zu den hostnames die im inventory file mit der variable hostname abgespeichert sind. Es updatet auch alle packes und das OS*
 
     ### Der Command zum ausführen:
     ```
@@ -119,6 +157,45 @@ Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansi
     ```
 
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Keywords
@@ -131,6 +208,7 @@ Dazu benötigen wir eine ["Control-Node"](https://docs.ansible.com/projects/ansi
 - **task**
 - **module**    
 - **template**
+- **roles**
 - **plugin**
 - **vaults**
     
