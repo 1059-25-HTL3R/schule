@@ -117,4 +117,59 @@ winRM quickconfig
 Enable-PSRemoting -Force
 ```
 
+#### Über HTTP verbinden (zertifikatlos aber unsicher)
+
+- Auf den Windows hosts unencrypted access und eingehend http zulassen:
+```shell
+Set-Item -Path WSMan:\localhost\Service\AllowUnencrypted -Value True
+
+Set-Item -Path WSMan:\localhost\Service\Auth\Basic -Value True
+
+Enable-NetFirewallRule -Name "WINRM-HTTP-In-TCP"
+```
+
+- Konfiguration vom vars File für http auf dem Linux Server
+```shell
+ansible_user="<user>"
+ansible_password="<Passwort>"
+ansible_connection=winrm
+ansible_port=5985
+ansible_winrm_server_cert_validation=ignore
+ansible_winrm_scheme=http
+```
+
+#### Über HTTPS mit Self-Signed-Cert verbinden (sicherer)
+
+- Auf den Windows hosts Zertifikat erstellen:
+```shell
+New-SelfSignedCertificate -DnsName "WS2-Ansible" -CertStoreLocation Cert:\LocalMachine\My
+```
+![Create Certificate for HTTPS](./IMAGES/create_cert.png)
+
+- Der Thumbprint kann nochmal mit ```Get-ChildItem Cert:\LocalMachine\My``` angezeigt werden
+
+- HTTPS Listener konfigurieren (erstellten thumbprint angeben):
+```shell
+winrm create winrm/config/Listener?Address=*+Transport=HTTPS '@{CertificateThumbprint="FA8A0E1225C0F3B158EFDBD92EA7D195635FF8C8"}'
+```
+
+- HTTPS eingehend erlauben und authentication per winrm erlauben
+```shell
+netsh advfirewall firewall add rule name="WinRM HTTPS" dir=in action=allow protocol=TCP localport=5986
+
+winrm set winrm/config/service/Auth '@{Basic="true"}'
+```
+
+- Konfiguration vom vars File für https auf dem Linux Server
+```shell
+ansible_user="<user>"
+ansible_password="<passwort>!"
+ansible_connection=winrm
+ansible_port=5986
+ansible_winrm_server_cert_validation=ignore
+ansible_winrm_scheme=https
+```
+
+
+
 
