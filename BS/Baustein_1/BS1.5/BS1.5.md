@@ -12,16 +12,16 @@ Dazu setzen wir eine Testumgebung aus einer Linux Ansible Control Node und zwei 
 | ens37              | 192.168.1.1/24 | WAnsible   |
 
 - ### Konfiguration
-
+ 
     - Control Node mit Netplan konfigurieren
     ![Control Node Netplan Config](./IMAGES/netplan_config.png)
 
-## WS1-Ansible
+## WS1-Ansible (Managed Node)
 | interface          | ip             | lan segment|
 | ------------------ | -------------- | ---------- |
 | NAT-Interface      | DHCP           | -          |
 | Ethernet1          | 192.168.1.2/24 | WAnsible   |
-### Konfiguration
+### Konfiguration 
 **Skript:**
 ```shell
 # ---------- Script-Anfang ----------  
@@ -47,15 +47,16 @@ Set-NetFirewallRule -Name "CoreNet-Diag-ICMP4-EchoRequest-Out" -Enabled True
 
 Set-NetFirewallRule -Name "CoreNet-Diag-ICMP6-EchoRequest-In" -Enabled True  
 Set-NetFirewallRule -Name "CoreNet-Diag-ICMP6-EchoRequest-Out" -Enabled True  
-# RDP aktivieren  
+# RDP aktivieren
+winRM quickconfig  
 Enable-PSRemoting -Force  
 Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 0  
 # Reboot  
 Restart-Computer
 # ---------- Script-Ende----------
-```    
+```
 
-## WS2-Ansible
+## WS2-Ansible (Managed Node)
 | interface          | ip             | lan segment |
 | ------------------ | -------------- | ----------- |
 | NAT-Interface      | DHCP           | -           |
@@ -87,10 +88,33 @@ Set-NetFirewallRule -Name "CoreNet-Diag-ICMP4-EchoRequest-Out" -Enabled True
 
 Set-NetFirewallRule -Name "CoreNet-Diag-ICMP6-EchoRequest-In" -Enabled True  
 Set-NetFirewallRule -Name "CoreNet-Diag-ICMP6-EchoRequest-Out" -Enabled True  
-# RDP aktivieren  
+# RDP aktivieren
+winRM quickconfig
 Enable-PSRemoting -Force  
 Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 0  
 # Reboot  
 Restart-Computer
 # ---------- Script-Ende----------
 ```
+
+- ### Ansible Konfiguration 
+#### Linux Control Node
+
+- Ansible installieren:
+```shell
+sudo apt update
+sudo apt install ansible
+```
+- Die Datei /etc/ansible/hosts bearbeiten
+```shell
+sudo nano /etc/ansible/hosts
+    
+```
+#### Windows Managed Nodes
+- WICHTIG!: Falls noch nicht durchs Skript geschehen Windows Remote Management aktivieren (Server Manager->Lokaler Server->Remotemanagement) oder
+```shell
+winRM quickconfig
+Enable-PSRemoting -Force
+```
+
+
