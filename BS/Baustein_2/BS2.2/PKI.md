@@ -1,9 +1,6 @@
 # Einfache PKI-Lab-Umgebung mit AD CS (Single-Tier PKI)
 
-Dieses Dokument beschreibt, wie ich eine einfache PKI-Testumgebung mit Windows Server 2008 R2 aufgebaut habe.  
-Ziel: Ein anderer Schüler soll die Schritte nachmachen können, ohne die Installation vorher gesehen zu haben.
-
-> Hinweis: Wo „Screenshot:“ steht, kannst du später Screenshots einfügen.
+Implementierung einer AD-integrierten single-tier CA. Dokumentieren Sie diese in Form eines HowTo.  Prüfen Sie vorab die Voraussetzungen (Name, ADDS, DNS, IIS)!
 
 ---
 
