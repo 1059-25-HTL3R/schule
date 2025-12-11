@@ -115,7 +115,7 @@ wir benutzen eine Ubuntu VM als router
             ```net.ipv4.ip_forward=1``` *einfach das <#> weg machen*
             
             änderungen speichern und änderungen aktivieren mit folgendem command:
-        - ```udo sysctl -p``` 
+        - ```sudo sysctl -p``` 
             
             **WICHTIG**: Firewall am router ausmachen (oder konfigurieren):
 
