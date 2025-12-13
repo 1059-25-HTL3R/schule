@@ -1,0 +1,105 @@
+---
+- name: DNS-Konfiguration
+  hosts: R1, Client1, Client2, Client3
+  become: yes
+  tasks:
+    - name: Deaktiviere systemd-resolved auf allen Hosts
+      systemd:
+        name: systemd-resolved
+        state: stopped
+        enabled: no
+
+    - name: Entferne Symlink zu resolv.conf auf allen Hosts
+      file:
+        path: /etc/resolv.conf
+        state: absent
+
+    - name: Installiere BIND9 auf Client2
+      when: inventory_hostname == 'Client2'
+      apt:
+        name: bind9
+        state: present
+
+    - name: Konfiguriere named.conf.options auf Client2
+      when: inventory_hostname == 'Client2'
+      copy:
+        dest: /etc/bind/named.conf.options
+        content: |
+          options {
+            directory "/var/cache/bind";
+            listen-on { any; };  # Hört auf allen Interfaces
+            allow-query { any; };  # Allowed alle queries
+            recursion yes;
+            forwarders { 8.8.8.8; };  # Externe DNS
+          };
+      notify: Restart BIND
+
+    - name: Konfiguriere named.conf.local auf Client2 (Zone hinzufügen)
+      when: inventory_hostname == 'Client2'
+      copy:
+        dest: /etc/bind/named.conf.local
+        content: |
+          zone "corp.example.com" {
+            type master;
+            file "/etc/bind/db.corp.example.com";
+          };
+      notify: Restart BIND
+
+    - name: Erstelle Zone-Datei db.corp.example.com auf Client2
+      when: inventory_hostname == 'Client2'
+      copy:
+        dest: /etc/bind/db.corp.example.com
+        content: |
+          $TTL 604800
+          @ IN SOA Client2.corp.example.com. root.corp.example.com. (
+                                  1 ; Serial 
+                             604800 ; Refresh
+                              86400 ; Retry
+                            2419200 ; Expire
+                             604800 ) ; Negative Cache TTL
+          ;
+          @ IN NS Client2.corp.example.com.
+          Client2 IN A 192.168.2.1
+          R1 IN A 192.168.2.254
+          R1 IN A 192.168.1.254
+          Client3 IN A 192.168.2.2
+      notify: Restart BIND
+
+    - name: Setze resolv.conf auf Client2 (lokaler BIND)
+      when: inventory_hostname == 'Client2'
+      copy:
+        dest: /etc/resolv.conf
+        content: |
+          nameserver 127.0.0.1
+          search corp.example.com
+
+    - name: Setze resolv.conf auf Client3 (verwende Client2 als DNS)
+      when: inventory_hostname == 'Client3'
+      copy:
+        dest: /etc/resolv.conf
+        content: |
+          nameserver 192.168.2.1
+          search corp.example.com
+
+    - name: Setze resolv.conf auf Client1 (verwende Client2 als DNS)
+      when: inventory_hostname == 'Client1'
+      copy:
+        dest: /etc/resolv.conf
+        content: |
+          nameserver 192.168.2.1
+          search corp.example.com
+
+    - name: Setze resolv.conf auf R1 (verwende Client2 als DNS)
+      when: inventory_hostname == 'R1'
+      copy:
+        dest: /etc/resolv.conf
+        content: |
+          nameserver 192.168.2.1
+          search corp.example.com
+
+  handlers:
+    - name: Restart BIND
+      service:
+        name: bind9
+        state: restarted
+      when: inventory_hostname == 'Client2'
