@@ -117,7 +117,7 @@ winRM quickconfig
 Enable-PSRemoting -Force
 ```
 
-#### Über HTTP verbinden (zertifikatlos aber unsicher)
+#### Über HTTP verbinden (zertifikatlos und unverschlüsselt)
 
 - Auf den Windows hosts unencrypted access und eingehend http zulassen:
 ```shell
@@ -138,7 +138,7 @@ ansible_winrm_server_cert_validation=ignore
 ansible_winrm_scheme=http
 ```
 
-#### Über HTTPS mit Self-Signed-Cert verbinden (sicherer)
+#### Über HTTPS mit Self-Signed-Cert verbinden (verschlüsselt)
 
 - Auf den Windows hosts Zertifikat erstellen:
 ```shell
@@ -170,6 +170,30 @@ ansible_winrm_server_cert_validation=ignore
 ansible_winrm_scheme=https
 ```
 
+#### Konfiguration schreiben
+
+Ordnerstruktur: 
+    - inventories/
+        - hosts
+        - group_vars/
+            - windows_nodes.yaml
+    
+    - roles/
+        - windows_role/
+            - tasks/
+                - install_7zip.yaml
+
+    - playbooks/
+        - windows_config
+
+    - vars/
+        vault.yaml
+    ansible.cfg
+
+##### hosts file
+    ```shell
+    
+    ```
 
 
 
