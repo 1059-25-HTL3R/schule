@@ -147,8 +147,7 @@ wir benutzen eine Ubuntu VM als router
 
     ![repadmin /syncall /AeD output](./IMAGES/repadmin_syncall_AeD_output.png)
 
-    Bild zeigt eine erfolgreiche Force Replikation. 
-
+    Bild zeigt eine erfolgreiche Force Replikation.
 
 # Quellen
 [Microsoft MULTI-SITE](https://learn.microsoft.com/en-us/windows-server/remote/remote-access/ras/multisite/configure/configure-a-multisite-deployment)
