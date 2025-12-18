@@ -242,6 +242,98 @@ win_chocolatey:
     state: present
 ```
 
+##### win_updates file
+```shell
+- name: Install all critical and security updates
+  win_updates:
+    category_names:
+    - CriticalUpdates
+    - SecurityUpdates
+    state: installed
+  register: update_result
+  failed_when: false
+
+- name: Reboot host if required
+  win_reboot:
+    reboot_timeout: 1800
+    post_reboot_delay: 120
+  when: update_result.reboot_required
+
+- name: Warte nach Reboot
+  wait_for_connection:
+    delay: 30
+    timeout: 600
+```
+
+##### win_hotfix
+```shell
+- name: Liste installierter Hotfixes
+  win_hotfix:
+  register: hotfixes
+
+- name: Zeige installierte Hotfixes
+  debug:
+    var: hotfixes.hotfixes
+```
+##### win_domain_group
+```shell
+- name: Domänen-Gruppe erstellen
+  win_domain_group:
+    name: DataUsers
+    scope: global
+    category: security
+    state: present
+```
+
+##### win_domain_user
+```shell
+- name: Domänen-Benutzer erstellen
+  win_domain_user:
+    name: domainuser1
+    password: "DomPassw0rd!"
+    state: present
+
+- name: Domänen-Benutzer zur Domänen-Gruppe hinzufügen
+  win_group_membership:
+    name: DataUsers
+    members:
+      - domainuser1
+    state: present
+```
+
+##### win_acl
+```shell
+- name: NTFS Rechte für Domänen-Gruppe
+  win_acl:
+    path: C:\Data\Shared
+    user: "DOMAIN\\DataUsers"
+    rights: Modify
+    type: allow
+    inherit: ContainerInherit, ObjectInherit
+    state: present
+```
+
+#### ps_cpmmands
+```shell
+---
+- name: Prüfe die IP-Konfiguration (win_command)
+  win_command: ipconfig
+  register: ipconfig_result
+
+- name: Zeige die IP-Konfiguration
+  debug:
+    var: ipconfig_result.stdout
+
+- name: Prüfe WinRM-Service Status (win_shell, kurzer Befehl)
+  win_shell: (Get-Service WinRM).Status
+  register: winrm_status
+
+- name: Zeige den WinRM-Status
+  debug:
+    var: winrm_status.stdout
+```
+
+
 ##### main.yaml file
 - Man könnte auch alle tasks direkt in dieses File schreiben, Übersicht wäre aber dadurch schlechter
 ```shell
