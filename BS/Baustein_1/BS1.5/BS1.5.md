@@ -142,7 +142,7 @@ ansible_winrm_scheme=http
 
 - Auf den Windows hosts Zertifikat erstellen:
 ```shell
-New-SelfSignedCertificate -DnsName "WS2-Ansible" -CertStoreLocation Cert:\LocalMachine\My
+New-SelfSignedCertificate -DnsName "WS1-Ansible" -CertStoreLocation Cert:\LocalMachine\My
 ```
 ![Create Certificate for HTTPS](./IMAGES/create_cert.png)
 
@@ -150,7 +150,7 @@ New-SelfSignedCertificate -DnsName "WS2-Ansible" -CertStoreLocation Cert:\LocalM
 
 - HTTPS Listener konfigurieren (erstellten thumbprint angeben):
 ```shell
-winrm create winrm/config/Listener?Address=*+Transport=HTTPS '@{CertificateThumbprint="FA8A0E1225C0F3B158EFDBD92EA7D195635FF8C8"}'
+winrm create winrm/config/Listener?Address=*+Transport=HTTPS '@{CertificateThumbprint="BC67D5ADF5BD19E45A0C7FA70F28380A6A287652"}'
 ```
 
 - HTTPS eingehend erlauben und authentication per winrm erlauben
@@ -163,7 +163,7 @@ winrm set winrm/config/service/Auth '@{Basic="true"}'
 - Konfiguration vom vars File für https auf dem Linux Server
 ```shell
 ansible_user="<user>"
-ansible_password="<passwort>!"
+ansible_password="<passwort>"
 ansible_connection=winrm
 ansible_port=5986
 ansible_winrm_server_cert_validation=ignore
@@ -173,27 +173,94 @@ ansible_winrm_scheme=https
 #### Konfiguration schreiben
 
 Ordnerstruktur: 
-    - inventories/
-        - hosts
-        - group_vars/
+- inventories/
+    - hosts
+    - group_vars/
+        - windows_nodes/
             - windows_nodes.yaml
-    
-    - roles/
-        - windows_role/
-            - tasks/
-                - install_7zip.yaml
+            - vault.yaml
+- roles/
+    - windows_role/
+        - tasks/
+            - main.yaml
+            - install_chocolatey.yaml
+            - install_7zip.yaml
 
-    - playbooks/
-        - windows_config
 
-    - vars/
-        vault.yaml
-    ansible.cfg
+- playbooks/
+    - windows_config
+
+ansible.cfg
 
 ##### hosts file
-    ```shell
-    
-    ```
+- Beinhaltet die Addressen der Server
+```shell
+[windows_nodes]
+ws1_ansible ansible_host=192.168.1.2
+ws2_ansible ansible_host=192.168.1.3
+```
+
+##### windows_nodes file
+- Setzt die Variablen die zur Verbindung benötigt werden
+```shell
+ansible_connection: winrm
+ansible_port: 5986
+ansible_winrm_server_cert_validation: ignore
+ansible_winrm_scheme: https
+```
+
+##### vault file
+- Es wird ein Vault file für das verschlüsselte Speichern von Benutzernamen und Passwörtern der Server
+```shell
+# Erstellen (Passwort angeben)
+ansible-vault create vault.yaml
+
+# Bearbeiten
+ansible-vault edit vault.yaml
+
+# Inhalt ausgeben
+ansible-vault view vault.yaml
+```
+Inhalt:
+```shell
+ansible_user: <username>
+ansible_password: "<password>"
+```
+
+##### install_chocolatey file
+```shell
+- name: Installiert Chocolatey
+win_chocolatey:
+    name: chocolatey
+    state: present
+```
+##### install_7zip file
+```shell
+- name: Installiert 7-Zip über Chocolatey
+  win_chocolatey:
+    name: 7zip
+    state: present
+```
+
+##### main.yaml file
+- Man könnte auch alle tasks direkt in dieses File schreiben, Übersicht wäre aber dadurch schlechter
+```shell
+- import_tasks: install_chocolatey.yaml
+- import_tasks: install_7zip.yaml
+```
+
+##### windows_config
+```shell
+- name: Windows Setup
+  hosts: windows_nodes
+  roles:
+    - windows_role
+```
 
 
 
+Befehl:
+ansible-playbook \
+  -i inventories/hosts \
+  playbooks/windows_config.yml \
+  --ask-vault-pass
