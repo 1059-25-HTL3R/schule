@@ -88,14 +88,14 @@ Falls ein Router dazwischen benötigt wird (z. B. aus BS1.1), stelle sicher, das
 ## Testen
 ### Tunnel-Verbindung Testen
 - Auf beiden Clients: `wg show` (sollte Peers und Handshakes anzeigen)
-![wg show output Client1](.\IMAGES\Wireguard_handshake_Client1.png)
-![wg show output Client3](.\IMAGES\Wireguard_handshake_Client3.png)
+![wg show output Client1](./IMAGES/Wireguard_handshake_Client1.png)
+![wg show output Client3](./IMAGES/Wireguard_handshake_Client3.png)
 
 Bild zeigt den Status des WireGuard-Interfaces und verbundene Peers.
 
 - Ping-Test: Von Client1 zu Client3 über VPN-IPs (z. B. `ping 10.0.0.1` und `ping fd0d:86fa:c3bc::1`)
-![ping durch den Tunnel Client1](.\IMAGES\Wireguard_ping_VPN_Tunnel_Client1.png)
-![ping durch den Tunnel Client3](.\IMAGES\Wireguard_ping_VPN_Tunnel_Client3.png)
+![ping durch den Tunnel Client1](./IMAGES/Wireguard_ping_VPN_Tunnel_Client1.png)
+![ping durch den Tunnel Client3](./IMAGES/Wireguard_ping_VPN_Tunnel_Client3.png)
 
 ### Durchsatz Testen mit iperf
 - Installiere iperf auf beiden: `apt install iperf3`
