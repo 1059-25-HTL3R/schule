@@ -1,0 +1,105 @@
+---
+- name: WireGuard Dual-Stack (IPv4 + IPv6) VPN Konfiguration zwischen Client1 und Client3
+  hosts: 'Client1, Client3'
+  become: yes
+  tasks:
+    - name: Installiere WireGuard
+      apt:
+        name: wireguard
+        state: present
+        update_cache: yes
+
+    - name: Erstelle WireGuard Verzeichnis
+      file:
+        path: /etc/wireguard
+        state: directory
+        mode: '0700'
+
+    - name: Generiere privaten Schlüssel auf Client1
+      when: inventory_hostname == 'Client1'
+      shell: |
+        umask 077
+        wg genkey > /etc/wireguard/private.key
+      args:
+        creates: /etc/wireguard/private.key
+
+    - name: Generiere privaten Schlüssel auf Client3
+      when: inventory_hostname == 'Client3'
+      shell: |
+        umask 077
+        wg genkey > /etc/wireguard/private.key
+      args:
+        creates: /etc/wireguard/private.key
+
+    - name: Setze Berechtigungen für privaten Schlüssel
+      file:
+        path: /etc/wireguard/private.key
+        mode: '0600'
+
+    - name: Generiere öffentlichen Schlüssel auf Client1
+      when: inventory_hostname == 'Client1'
+      shell: cat /etc/wireguard/private.key | wg pubkey > /etc/wireguard/public.key
+      args:
+        creates: /etc/wireguard/public.key
+
+    - name: Generiere öffentlichen Schlüssel auf Client3
+      when: inventory_hostname == 'Client3'
+      shell: cat /etc/wireguard/private.key | wg pubkey > /etc/wireguard/public.key
+      args:
+        creates: /etc/wireguard/public.key
+
+    - name: Hole öffentlichen Schlüssel von Client1
+      slurp:
+        src: /etc/wireguard/public.key
+      delegate_to: Client1
+      run_once: true
+      register: client1_pub
+
+    - name: Hole öffentlichen Schlüssel von Client3
+      slurp:
+        src: /etc/wireguard/public.key
+      delegate_to: Client3
+      run_once: true
+      register: client3_pub
+
+    - name: Konfiguriere WireGuard Dual-Stack auf Client3 (als Listener)
+      when: inventory_hostname == 'Client3'
+      shell:
+        cmd: |
+          cat << EOF > /etc/wireguard/wg0.conf
+          [Interface]
+          Address = 10.0.0.1/24, fd0d:86fa:c3bc::1/64
+          ListenPort = 51820
+          PrivateKey = $(cat /etc/wireguard/private.key)
+
+          [Peer]
+          PublicKey = {{ client1_pub['content'] | b64decode }}
+          AllowedIPs = 10.0.0.2/32, fd0d:86fa:c3bc::2/128
+          EOF
+          chmod 0600 /etc/wireguard/wg0.conf
+      notify: Apply WireGuard
+
+    - name: Konfiguriere WireGuard Dual-Stack auf Client1 (als Connector)
+      when: inventory_hostname == 'Client1'
+      shell:
+        cmd: |
+          cat << EOF > /etc/wireguard/wg0.conf
+          [Interface]
+          Address = 10.0.0.2/24, fd0d:86fa:c3bc::2/64
+          PrivateKey = $(cat /etc/wireguard/private.key)
+
+          [Peer]
+          PublicKey = {{ client3_pub['content'] | b64decode }}
+          AllowedIPs = 10.0.0.1/32, fd0d:86fa:c3bc::1/128
+          Endpoint = 192.168.2.2:51820   
+          PersistentKeepalive = 25
+          EOF
+          chmod 0600 /etc/wireguard/wg0.conf
+      notify: Apply WireGuard
+
+  handlers:
+    - name: Apply WireGuard
+      systemd:
+        name: wg-quick@wg0
+        enabled: yes
+        state: restarted
