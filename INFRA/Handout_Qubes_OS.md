@@ -57,3 +57,7 @@ Jede Anwendung läuft in ihrer eigenen VM. Dadurch bleibt ein kompromittierter B
 
 Benjamin Zwettler
 Niclas Baumgartlinger
+
+sudo cephadm shell -- \
+    ceph orch daemon add osd \
+    server1:/sdb 2> /dev/null

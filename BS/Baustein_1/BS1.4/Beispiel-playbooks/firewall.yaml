@@ -15,7 +15,7 @@
     - name: Erlaube Traffic aus Netz1 und Netz2 (intern)
       ufw:
         rule: allow
-        interface: enps37
+        interface: ens37
         direction: in
     - name: Erlaube Traffic aus Netz2 (intern)
       ufw:

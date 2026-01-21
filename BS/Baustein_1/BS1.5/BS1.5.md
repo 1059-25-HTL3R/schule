@@ -297,8 +297,8 @@ win_chocolatey:
     update_password: on_create  
     password_never_expires: true
   loop:
-    - { name: "User1", password: "Password1" }
-    - { name: "User2", password: "Password2" }
+    - { name: "loc_User1", password: "Password1" }
+    - { name: "loc_User2", password: "Password2" }
 
 - name: Create Development folder
   win_file:
