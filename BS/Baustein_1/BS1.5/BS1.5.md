@@ -33,10 +33,10 @@ Rename-NetAdapter -Name 'Ethernet0' -NewName 'Internet'
 Rename-NetAdapter -Name 'Ethernet1' -NewName 'WAnsible'  
 # Setup dynamic for IPv4  
 Set-NetIPInterface -InterfaceAlias 'WAnsible' -AddressFamily IPv4 -Dhcp Disabled  
-New-NetIPAddress -InterfaceAlias 'WAnsible'-AddressFamily IPv4 -IPAddress '192.168.1.2' -PrefixLength 24 -DefaultGateway "192.168.1.1" 
+New-NetIPAddress -InterfaceAlias 'WAnsible'-AddressFamily IPv4 -IPAddress '192.168.1.2' -PrefixLength 24 -DefaultGateway "192.168.1.2" 
 # DNS-Client  
 Set-DnsClientServerAddress -InterfaceAlias 'WAnsible' -ResetServerAddresses
-Set-DnsClientServerAddress -InterfaceAlias 'WAnsible' -ServerAddresses ("192.168.1.1")
+Set-DnsClientServerAddress -InterfaceAlias 'WAnsible' -ServerAddresses ("192.168.1.2")
   
 # Set timezone and time (timeserver)  
 w32tm /config /syncfromflags:manual /manualpeerlist:"pool.ntp.org" /reliable:yes /update
@@ -55,6 +55,7 @@ Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' 
 Restart-Computer
 # ---------- Script-Ende----------
 ```
+Zum DC heraufstufen (corp.com)
 
 ## WS2-Ansible (Managed Node)
 | interface          | ip             | lan segment |
@@ -74,10 +75,10 @@ Rename-NetAdapter -Name 'Ethernet0' -NewName 'Internet'
 Rename-NetAdapter -Name 'Ethernet1' -NewName 'WAnsible'  
 # Setup dynamic for IPv4  
 Set-NetIPInterface -InterfaceAlias 'WAnsible' -AddressFamily IPv4 -Dhcp Disabled  
-New-NetIPAddress -InterfaceAlias 'WAnsible'-AddressFamily IPv4 -IPAddress '192.168.1.3' -PrefixLength 24 -DefaultGateway "192.168.1.1" 
+New-NetIPAddress -InterfaceAlias 'WAnsible'-AddressFamily IPv4 -IPAddress '192.168.1.3' -PrefixLength 24 -DefaultGateway "192.168.1.2" 
 # DNS-Client  
 Set-DnsClientServerAddress -InterfaceAlias 'WAnsible' -ResetServerAddresses
-Set-DnsClientServerAddress -InterfaceAlias 'WAnsible' -ServerAddresses ("192.168.1.1")
+Set-DnsClientServerAddress -InterfaceAlias 'WAnsible' -ServerAddresses ("192.168.1.2")
   
 # Set timezone and time (timeserver)  
 w32tm /config /syncfromflags:manual /manualpeerlist:"pool.ntp.org" /reliable:yes /update
@@ -96,6 +97,7 @@ Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' 
 Restart-Computer
 # ---------- Script-Ende----------
 ```
+Domain beitreten und zum DC heraufstufen (corp.com)
 
 - ### Ansible Konfiguration 
 #### Linux Control Node
@@ -185,6 +187,11 @@ Ordnerstruktur:
             - main.yaml
             - install_chocolatey.yaml
             - install_7zip.yaml
+            - win_updates.yaml
+            - win_hotfix.yaml
+            - local.yaml
+            - domain.yaml
+            - win_commands.yaml
 
 
 - playbooks/
@@ -223,8 +230,8 @@ ansible-vault view vault.yaml
 ```
 Inhalt:
 ```shell
-ansible_user: <username>
-ansible_password: "<password>"
+ansible_user: "domain\\<username>"
+ansible_password: "password"
 ```
 
 ##### install_chocolatey file
@@ -251,86 +258,111 @@ win_chocolatey:
     - SecurityUpdates
     state: installed
   register: update_result
-  failed_when: false
 
 - name: Reboot host if required
   win_reboot:
-    reboot_timeout: 1800
-    post_reboot_delay: 120
   when: update_result.reboot_required
-
-- name: Warte nach Reboot
-  wait_for_connection:
-    delay: 30
-    timeout: 600
 ```
 
 ##### win_hotfix
 ```shell
-- name: Liste installierter Hotfixes
+- name: Download KB3172729 for Server 2012 R2
+  win_get_url:
+    url: http://download.windowsupdate.com/d/msdownload/update/software/secu/2016/07/windows8.1-kb3172729-x64_e8003822a7ef4705cbb65623b72fd3cec73fe222.msu
+    dest: C:\temp\KB3172729.msu
+
+- name: Install hotfix
   win_hotfix:
-  register: hotfixes
-
-- name: Zeige installierte Hotfixes
-  debug:
-    var: hotfixes.hotfixes
-```
-##### win_domain_group
-```shell
-- name: Domänen-Gruppe erstellen
-  win_domain_group:
-    name: DataUsers
-    scope: global
-    category: security
+    hotfix_kb: KB3172729
+    source: C:\temp\KB3172729.msu
     state: present
+  register: hotfix_result
+
+- name: Reboot host if required
+  win_reboot:
+  when: hotfix_result.reboot_required
 ```
-
-##### win_domain_user
+##### local
 ```shell
-- name: Domänen-Benutzer erstellen
-  win_domain_user:
-    name: domainuser1
-    password: "DomPassw0rd!"
-    state: present
+- name: Create local group to contain new users
+  win_group:
+    name: LocalGroup
+    description: Allow access to C:\Development folder
 
-- name: Domänen-Benutzer zur Domänen-Gruppe hinzufügen
-  win_group_membership:
-    name: DataUsers
-    members:
-      - domainuser1
-    state: present
-```
+- name: Create local users
+  win_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    groups: "LocalGroup"           
+    update_password: on_create  
+    password_never_expires: true
+  loop:
+    - { name: "User1", password: "Password1" }
+    - { name: "User2", password: "Password2" }
 
-##### win_acl
-```shell
-- name: NTFS Rechte für Domänen-Gruppe
+- name: Create Development folder
+  win_file:
+    path: C:\Development
+    state: directory
+
+- name: Set ACL of Development folder
   win_acl:
-    path: C:\Data\Shared
-    user: "DOMAIN\\DataUsers"
-    rights: Modify
-    type: allow
-    inherit: ContainerInherit, ObjectInherit
+    path: C:\Development
+    rights: FullControl
     state: present
+    type: allow
+    user: LocalGroup
+
+- name: Remove parent inheritance of Development folder
+  win_acl_inheritance:
+    path: C:\Development
+    reorganize: true
+    state: absent
 ```
 
-#### ps_cpmmands
+##### domain
+```shell                                                            
+- name: Create global group
+  win_domain_group:
+    name: 'G_test'
+    scope: 'global'
+    state: present
+    domain: corp.at
+  delegate_to: ws1_ansible
+  run_once: true
+
+- name: Create domain local group and add global group as member
+  win_domain_group:
+    name: 'DL_test'
+    scope: 'domainlocal'
+    members:
+    - 'CORP\G_test'
+    state: present
+    domain: corp.at
+  delegate_to: ws1_ansible
+  run_once: true
+
+- name: Create domain user and add to global group
+  win_domain_user:
+    name: user
+    password: "Ganzgeheim123!"
+    update_password: always
+    state: present
+    groups:
+    - 'G_test'
+  delegate_to: ws1_ansible
+  run_once: true
+```
+
+#### win_commands
 ```shell
----
-- name: Prüfe die IP-Konfiguration (win_command)
-  win_command: ipconfig
-  register: ipconfig_result
+- name: Ensure folder test
+  win_shell: if not exist C:\Users\janwi\Desktop\test mkdir C:\Users\janwi\Desktop\test
+  args:
+    executable: cmd.exe
 
-- name: Zeige die IP-Konfiguration
-  debug:
-    var: ipconfig_result.stdout
-
-- name: Prüfe WinRM-Service Status (win_shell, kurzer Befehl)
-  win_shell: (Get-Service WinRM).Status
-  register: winrm_status
-
-- name: Zeige den WinRM-Status
-  debug:
-    var: winrm_status.stdout
+- name: Run an executable using win_command
+  win_command: whoami.exe
 ```
 
 
@@ -339,14 +371,6 @@ win_chocolatey:
 ```shell
 - import_tasks: install_chocolatey.yaml
 - import_tasks: install_7zip.yaml
-```
-
-##### windows_config
-```shell
-- name: Windows Setup
-  hosts: windows_nodes
-  roles:
-    - windows_role
 ```
 
 
