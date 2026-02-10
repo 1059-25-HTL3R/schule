@@ -49,7 +49,7 @@ Falls die Einstellungen für die Vorraussetzungen nicht angezeigt werden in VMWa
 Es handelt sich um eine spezielle Sicherheitsgruppe im Active Directory. Wenn du einen Benutzer in diese Gruppe verschiebst, wendet Windows automatisch bestimmte Sicherheitsregeln für dieses Konto an. Wie z.B.
 
 - NTLM wird als Anmeldemethode komplett blockiert. Nur Kerberos ist erlaubt
-- Verkürzte Ticket Expiry Time
+- Verkürzte Ticket Expiry Time für das TGT
 - Passwörter werden nicht mehr im Cache gespeichert
 
 Um einen User in die Gruppe der Protected User hinzuzufügen, muss man diesen lediglich in die AD-Gruppe "Protected Users" hinzufügen.
