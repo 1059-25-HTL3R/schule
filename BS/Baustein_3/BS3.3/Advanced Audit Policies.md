@@ -61,6 +61,7 @@ Damit die granularen "Advanced"-Einstellungen die alten Standard-Kategorien sich
 ## Testen
 Jetzt müssen wir nur noch testen beim User. Vorher noch mit gpupdate /force die GPOs Updaten in der Powershell. 
 Mit dem Cmdlet auditpol /get /category:* kann man schauen welche Audit Policies gerade sktiv sind:
+
 ![image](./IMAGES/auditpol.png)
 
 Event Logs können nun im Event Viewer vom Server angeschaut werden. Wie z.B. wenn ein Account erstellt wird:
