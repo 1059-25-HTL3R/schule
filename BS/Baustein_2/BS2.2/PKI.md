@@ -300,12 +300,13 @@ certutil -url C:\win01.cer
 
 3. Zuerst „CRLs (from CDP)“ → `Retrieve` → Status sollte „Verified“ sein.
 4. Dann „Certs (from AIA)“ → `Retrieve` → ebenfalls „Verified“.
-5. Danach:
 
 ![image](./IMAGES/WIN01_CDP_abgerufen.png)
 
 
 ![image](./IMAGES/WIN01_AIA_abrufen.png)
+
+5. Danach:
 
 ```
 certutil -verify -urlfetch C:\win01.cer
