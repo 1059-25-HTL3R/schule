@@ -23,9 +23,12 @@ Die Topologie von den vorherigen Modulen einfach weiterverwenden.
    - bei corp user die Gruppe **"Domain Users"**
    - bei Workstation Authentication die Gruppe **"Domain Computers"** 
 - dann > apply
-![image](./IMAGES/CA01_Certificate_template_autoenrollment_corp_user.png)
 
-![image](./IMAGES/CA01_Certificate_template_autoenrollment_workstation_authentication.png)
+   ![image](./IMAGES/CA01_Certificate_template_autoenrollment_corp_user.png)
+
+
+   ![image](./IMAGES/CA01_Certificate_template_autoenrollment_workstation_authentication.png)
+
 1. Öffne auf einem Domänencontroller die **Group Policy Management** Konsole.
 2. Erstelle eine neue GPO und verknüpfe sie mit der Domäne bzw. der OU, in der die Serverobjekte liegen. 
 
