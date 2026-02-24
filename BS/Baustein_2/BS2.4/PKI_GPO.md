@@ -23,6 +23,7 @@ Die Topologie von den vorherigen Modulen einfach weiterverwenden.
    - bei corp user die Gruppe **"Domain Users"**
    - bei Workstation Authentication die Gruppe **"Domain Computers"** 
 - dann > apply
+*(!Wichtig) das Corp_User template erwartet das der user eine Email eingetragen hat!!*
 
    ![image](./IMAGES/CA01_Certificate_template_autoenrollment_corp_user.png)
 
