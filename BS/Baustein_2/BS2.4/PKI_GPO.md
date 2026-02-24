@@ -14,6 +14,18 @@ Die Topologie von den vorherigen Modulen einfach weiterverwenden.
 
 ## 1. Auto-Enrollment für Serverzertifikate konfigurieren
 
+0. Certificate Templates anpassen.
+- auf der CA -> certsrv.msc öffnen
+- Certificate Templates > rechtsclick > "manage"
+- die Templates die auto enrolled werden sollen (das template **"corp User"**, und **"Workstation Authentication"**)
+- diese templates rechtsclicken > "properties"
+- im Reiter "Security" die jeweilige Gruppe auswählen und "Autoenroll" anhaken
+   - bei corp user die Gruppe **"Domain Users"**
+   - bei Workstation Authentication die Gruppe **"Domain Computers"** 
+- dann > apply
+![image](./IMAGES/CA01_Certificate_template_autoenrollment_corp_user.png)
+
+![image](./IMAGES/CA01_Certificate_template_autoenrollment_workstation_authentication.png)
 1. Öffne auf einem Domänencontroller die **Group Policy Management** Konsole.
 2. Erstelle eine neue GPO und verknüpfe sie mit der Domäne bzw. der OU, in der die Serverobjekte liegen. 
 
