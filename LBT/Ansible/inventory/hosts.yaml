@@ -1,0 +1,99 @@
+all:
+  children:
+    oslo:
+      children:
+        oslo-dmz:
+          children:
+            linux:
+              children:
+                linux-srv:
+                  hosts:
+                    oslo-srv1:
+                    oslo-srv2:
+
+      oslo-domain:
+        children:
+          linux:
+            children:
+              linux-clt:
+                hosts:
+                  oslo-mail1:
+                  oslo-mail2:
+
+          windows:
+            children:
+              windows-srv:
+                hosts:
+                  oslo-rds:
+                  oslo-ca:
+                  oslo-dc1:
+                  oslo-dc2:
+
+            windows-clt:
+              hosts:
+                oslo-ws:
+
+          cisco:
+            hosts:
+              oslo-r:
+
+      oslo-mgmt:
+        children:
+          linux:
+            children:
+              linux-clt:
+                hosts:
+                  oslo-ansible:
+
+        windows:
+          children:
+            windows-clt:
+              hosts:
+                oslo-paw:
+
+      oslo-firewall:
+        children:
+          fortigate:
+            hosts:
+              oslo-fw:
+
+    trondheim:
+      children:
+        linux:
+          children:
+            linux-clt:
+              hosts:
+                th-srv:
+
+      windows:
+        children:
+          windows-srv:
+            hosts:
+              th-dc1:
+
+        windows-clt:
+          hosts:
+            th-ws:
+
+    stavanger:
+      children:
+        windows:
+          children:
+            windows-srv:
+              hosts:
+                sv-rodc:
+
+        windows-clt:
+          hosts:
+            sv-ws:
+
+        pfsense:
+          hosts:
+            sv-vpn:
+
+    backbone:
+      children:
+        cisco:
+          hosts:
+            bb1:
+            bb2:
