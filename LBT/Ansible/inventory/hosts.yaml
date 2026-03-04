@@ -29,22 +29,12 @@ all:
                     oslo-dc1:
                     oslo-dc2:
 
-                windows-clt:
-                  hosts:
-                    oslo-ws:
-
             cisco:
               hosts:
                 oslo-r:
 
         oslo-mgmt:
           children:
-            linux:
-              children:
-                linux-clt:
-                  hosts:
-                    oslo-ansible:
-
             windows:
               children:
                 windows-clt:
@@ -70,10 +60,6 @@ all:
             windows-srv:
               hosts:
                 th-dc1:
-
-            windows-clt:
-              hosts:
-                th-ws:
         
         trondheim-firewall:
           children:
@@ -89,10 +75,6 @@ all:
             windows-srv:
               hosts:
                 sv-rodc:
-
-            windows-clt:
-              hosts:
-                sv-ws:
 
         stavanger-firewall:
           children:

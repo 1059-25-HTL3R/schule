@@ -1,0 +1,8 @@
+ansible_user: junioradmin
+ansible_password: junioradmin
+ansible_connection: ssh
+ansible_port: 22
+
+ansible_become_method: sudo
+ansible_become_user: root
+ansible_become_password: junioradmin
