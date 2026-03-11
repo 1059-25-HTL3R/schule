@@ -1,0 +1,58 @@
+enable
+configure terminal
+
+no ip domain-lookup
+
+hostname BB2
+
+username cisco algorithm-type scrypt secret cisco
+username cisco privilege 15
+
+service password-encryption
+
+ip domain-name backbone.equirnor.no
+crypto key generate rsa usage-keys modulus 1024
+ip ssh version 2
+
+line console 0
+  logging synchronous
+  login local
+  exec-timeout 0
+  exit
+
+line vty 0 924
+  logging synchronous
+  login local
+  exec-timeout 0
+  transport input ssh
+  exit
+
+int g0/0
+  desc to_Internet
+  ip address dhcp
+  no shutdown
+  exit
+
+int g0/1
+  desc to_BB1
+  ip address 203.0.113.6 255.255.255.252
+  no shutdown
+  exit
+
+int g0/2
+  desc to_Trondheim
+  ip address 203.0.113.1 255.255.255.252
+  no shutdown
+  exit
+
+int g0/3
+  desc to_Oslo
+  ip address 203.0.113.10 255.255.255.252
+  no shutdown
+  exit
+
+int lo0
+  ip address 2.2.2.2 255.255.255.255
+  exit
+
+router ospf 10
