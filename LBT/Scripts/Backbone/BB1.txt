@@ -50,7 +50,6 @@ int lo0
   exit
 
 router ospf 10
-  router-id lo0
   network 203.0.113.0 0.0.0.255 area 10
   passive-interface g0/0
   passive-interface g0/2
