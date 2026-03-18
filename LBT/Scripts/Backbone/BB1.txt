@@ -1,7 +1,7 @@
 enable
 configure terminal
 
-no ip domain-lookup
+no ip domain lookup
 
 hostname BB2
 
