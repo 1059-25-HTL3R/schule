@@ -1,7 +1,7 @@
 enable
 configure terminal
 
-no ip domain-lookup
+no ip domain lookup
 
 hostname BB2
 
@@ -10,7 +10,7 @@ username cisco privilege 15
 
 service password-encryption
 
-ip domain-name backbone.equirnor.no
+ip domain-name backbone.equinor.no
 crypto key generate rsa usage-keys modulus 1024
 ip ssh version 2
 
@@ -20,32 +20,32 @@ line console 0
   exec-timeout 0
   exit
 
-line vty 0 924
+line vty 0 97
   logging synchronous
   login local
   exec-timeout 0
   transport input ssh
   exit
 
-int g0/0
+int g1
   desc to_Internet
   ip address dhcp
   no shutdown
   exit
 
-int g0/1
+int g2
   desc to_BB1
   ip address 203.0.113.6 255.255.255.252
   no shutdown
   exit
 
-int g0/2
+int g3
   desc to_Trondheim
   ip address 203.0.113.1 255.255.255.252
   no shutdown
   exit
 
-int g0/3
+int g4
   desc to_Oslo
   ip address 203.0.113.10 255.255.255.252
   no shutdown
@@ -57,9 +57,9 @@ int lo0
 
 router ospf 10
   network 203.0.113.0 0.0.0.255 area 10
-  passive-interface g0/0
-  passive-interface g0/2
-  passive-interface g0/3
+  passive-interface g1
+  passive-interface g3
+  passive-interface g4
   exit
 
-ip route 0.0.0.0 0.0.0.0 g0/0
+ip route 0.0.0.0 0.0.0.0 g1
