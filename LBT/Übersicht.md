@@ -1,4 +1,8 @@
-# geräte
+# Übersicht
+
+[Fortinet starting guide](https://docs.fortinet.com/document/fortigate/7.6.6/administration-guide/241541/connecting-using-a-web-browser)
+
+## Geräte
 
 ## windows Server
 
