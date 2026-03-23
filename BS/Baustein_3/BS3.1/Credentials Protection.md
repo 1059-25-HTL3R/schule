@@ -112,11 +112,13 @@ jeweils mit secure und einmal unsecure anmelden und mimikatz folgendermassen aus
 3. Output überprüfen:
 
     - secure user
+  
         ![secure_user_mimikatz_output](./IMAGES/secure_user_mimikatz_output.png)
 
         hier wird KEIN "NTLM" hash sichtbar da user "secure" teil der "Protected_User" Gruppe ist.
 
     - unsecure user
+  
         ![unsecure_user_mimikatz_output](./IMAGES/unsecure_user_mimikatz_output.png)
 
         hier steht ein "NTLM" hash da user "unsecure" NICHT teil der "Protected_User" Gruppe ist.
