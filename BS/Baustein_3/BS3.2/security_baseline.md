@@ -10,6 +10,7 @@ Microsoft Security Compliance Toolkit auf dem Server downloaden:
 https://www.microsoft.com/en-us/download/details.aspx?id=553194
 
 folgende Tools auswählen und entzippen:
+
 ![tools](IMAGES/tools.png)
 
 ## Baseline im AD Anwenden
