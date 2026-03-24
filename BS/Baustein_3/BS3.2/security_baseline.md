@@ -16,7 +16,7 @@ folgende Tools auswählen und entzippen:
 
 ## Baseline im AD Anwenden
 
-- Kopieren des gesamten Inhaltes des Ordners 
+- Kopieren des gesamten Inhaltes des Ordners
 `Windows Server-2022-Security-Baseline\templates`
 in den policy definitions Store:
 `C:\Windows\SYSVOL\sysvol\<domain-name>\Policies\PolicyDefinitions`
