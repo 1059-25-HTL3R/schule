@@ -29,24 +29,28 @@ line vty 0 97
 
 int g1
   desc to_Internet
+  ip nat outside
   ip address dhcp
   no shutdown
   exit
 
 int g2
   desc to_BB1
+  ip nat inside
   ip address 203.0.113.6 255.255.255.252
   no shutdown
   exit
 
 int g3
   desc to_Trondheim
+  ip nat inside
   ip address 203.0.113.1 255.255.255.252
   no shutdown
   exit
 
 int g4
   desc to_Oslo
+  ip nat inside
   ip address 203.0.113.10 255.255.255.252
   no shutdown
   exit
@@ -54,6 +58,13 @@ int g4
 int lo0
   ip address 2.2.2.2 255.255.255.255
   exit
+
+ip access-list extended NAT
+  remark "any any" weil kein anderes Netzwerk möglich außer interne
+  permit ip any any
+  exit
+
+ip nat inside source list NAT int g1 overload
 
 router ospf 10
   network 203.0.113.0 0.0.0.255 area 10
