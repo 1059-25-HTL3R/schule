@@ -23,10 +23,6 @@ config system interface
         set ip 203.0.113.9 255.255.255.252
         set allowaccess ping
     next
-    edit "port4"
-        set mode dhcp   
-        set allowaccess ping
-    next
 end
 
 config router static
