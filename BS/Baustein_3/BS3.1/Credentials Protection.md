@@ -55,3 +55,70 @@ Es handelt sich um eine spezielle Sicherheitsgruppe im Active Directory. Wenn du
 Um einen User in die Gruppe der Protected User hinzuzufügen, muss man diesen lediglich in die AD-Gruppe "Protected Users" hinzufügen.
 
 ![image](./IMAGES/Protected_User_Group.png)
+
+## Testen von Protected Usern mit Mimikatz
+
+### Instalation von "Mimikatz"
+
+- https://github.com/gentilkiwi/mimikatz/releases
+  
+  Der download kann Probleme machen:
+  
+  - Microsoft kann es als Virus erkennen, mit 7zip hat es bei mir funktioniert (7zip muss auch instaliert werden)
+  [Download](https://www.7-zip.org/download.html)
+
+- Mimikatz auf dem Lokalen Rechner für alle User zugänglich abspeichern.
+
+---
+
+### User fürs Testen erstellen
+
+1. "secure user" erstellen
+
+    - Active directory user and computer
+    - neuer user
+    - teil der Gruppe "**Protected User**"
+
+2. "unsecure user" erstellen
+
+    - Active directory user and computer
+    - neuer user
+
+Falls die User sich direkt an einem Domain Controler anmelden können sollen, um keinen extra client PC erstellen zu müssen muss die "default domain Controler Policy" angepasst werden.
+
+![DC_Local_logon_Group_Policy.png](./IMAGES/DC_Local_logon_Group_Policy.png)
+
+wie im screenshot beschrieben die "default domain controller policy" mit edit bearbeiten. Die Gehighlightete regel mit den 2 neuen Usern ergänzen.
+
+---
+
+### Mimikatz auf beiden Accounts ausführen
+
+jeweils mit secure und einmal unsecure anmelden und mimikatz folgendermassen ausführen:
+
+1. mimikatz als administrator ausführen.
+2. Folgende Befehle in Mimikatz ausführen:
+
+    ``` bash
+    privilege::debug
+    ```
+
+    und:
+
+    ``` bash
+    sekurlsa::logonpasswords
+    ```
+
+3. Output überprüfen:
+
+    - secure user
+  
+        ![secure_user_mimikatz_output](./IMAGES/secure_user_mimikatz_output.png)
+
+        hier wird KEIN "NTLM" hash sichtbar da user "secure" teil der "Protected_User" Gruppe ist.
+
+    - unsecure user
+  
+        ![unsecure_user_mimikatz_output](./IMAGES/unsecure_user_mimikatz_output.png)
+
+        hier steht ein "NTLM" hash da user "unsecure" NICHT teil der "Protected_User" Gruppe ist.
