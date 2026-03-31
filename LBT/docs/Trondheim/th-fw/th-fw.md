@@ -60,7 +60,7 @@ Links im Reiter "Network" dann -> "Interfaces":
 
 ### Neue Firewall Policy erstellen
 
-Links im Reiter "Policy & Objects" dann -> Firewall Policy:
+Links im Reiter "Policy & Objects" dann -> "Firewall Policy":
 
 - Create a new Policy:
 
