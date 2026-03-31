@@ -64,4 +64,4 @@ Links im Reiter "Policy & Objects" dann -> "Firewall Policy":
 
 - Create a new Policy:
 
-![Create new Policy](./IMAGES/Fortinet_oslo-fw-Create_Firewall_Policy.png)
+    ![Create new Policy](./IMAGES/Fortinet_oslo-fw-Create_Firewall_Policy.png)
