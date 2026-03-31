@@ -10,6 +10,7 @@ Dient als Firewall des Oslo Standorts.
     - [Default Konfig der Fortigate mittel GUI](#default-konfig-der-fortigate-mittel-gui)
     - [Neue Firewall Policy erstellen](#neue-firewall-policy-erstellen)
     - [VPN: oslo-fw\_th-fw](#vpn-oslo-fw_th-fw)
+    - [VPN: oslo-fw\_sv-vpn](#vpn-oslo-fw_sv-vpn)
 
 ## First login
 
@@ -72,3 +73,9 @@ Links im Reiter "Policy & Objects" dann -> "Firewall Policy":
 Die Konfiguration ist hier aufzufinden:
 
 [Konfiguration oslo-fw_th-fw VPN](../../VPNs/oslo-fw_th-fw_VPN/oslo-fw_th-fw_VPN.md/#oslo-fw)
+
+### VPN: oslo-fw_sv-vpn
+
+Die Konfiguration ist hier aufzufinden:
+
+[Konfiguration oslo-fw_sv-vpn VPN](../../VPNs/oslo-fw_sv-vpn_VPN/oslo-fw_sv-vpn_VPN.md)
