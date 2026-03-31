@@ -5,6 +5,8 @@
   - [Konfiguration](#konfiguration)
     - [oslo-fw](#oslo-fw)
     - [th-fw](#th-fw)
+  - [Probleme](#probleme)
+    - [Phase-2 Proposal](#phase-2-proposal)
 
 ## Übersicht
 
@@ -56,6 +58,8 @@ konfiguration des VPNs auf der Fortigate Firewall: oslo-fw:
     - domain Vlan: ``10.3.3.0/24``
   - die restlichen optionen sollten standardmäßig gleich wie im Screenshot sein.
 
+[Probleme](#probleme) durchlesen!
+
 ### th-fw
 
 konfiguration des VPN auf der Fortigate Firewall: th-fw:
@@ -71,3 +75,13 @@ Die Konfiguration ist gleich wie auf der [oslo-fw](#oslo-fw) bis auf einzelne ei
 - das in-/out-going interface des VPNs angeben.
 - das Lokale Subnetz angeben welchens über den VPN darf.
   - Adresse: ``10.2.0.0/24``
+
+[Probleme](#probleme) durchlesen!
+
+## Probleme
+
+### Phase-2 Proposal
+
+Der Automatisch erstelle VPN verwendet veraltete Hash- und verschlüsselungs algorythmen. Diese sollten im Reiter: "VPN" dann "VPN Tunnels" im jewilig erstellten Tunnel herausgenommen werden.
+
+den Tunnel bearbeiten, dann ganz unten unter "Phase 2 selectors"  den VPN tunnel auswählen und bearbeiten. Unter Advanced die unsicheren Verfahren abwählen/löschen.
