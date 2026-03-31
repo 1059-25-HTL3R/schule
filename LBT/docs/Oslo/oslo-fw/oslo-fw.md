@@ -9,6 +9,7 @@ Dient als Firewall des Oslo Standorts.
     - [Lizenz hochladen](#lizenz-hochladen)
     - [Default Konfig der Fortigate mittel GUI](#default-konfig-der-fortigate-mittel-gui)
     - [Neue Firewall Policy erstellen](#neue-firewall-policy-erstellen)
+    - [VPN: oslo-fw\_th-fw](#vpn-oslo-fw_th-fw)
 
 ## First login
 
@@ -65,3 +66,9 @@ Links im Reiter "Policy & Objects" dann -> "Firewall Policy":
 - Create a new Policy:
 
     ![Create new Policy](./IMAGES/Fortinet_oslo-fw-Create_Firewall_Policy.png)
+
+### VPN: oslo-fw_th-fw
+
+Die Konfiguration ist hier aufzufinden:
+
+[Konfiguration oslo-fw_th-fw VPN](../../VPNs/oslo-fw_th-fw_VPN/oslo-fw_th-fw_VPN.md/#oslo-fw)
