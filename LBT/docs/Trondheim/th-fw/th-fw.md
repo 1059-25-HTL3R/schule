@@ -23,7 +23,7 @@ Dient als Firewall des Trondheim Standorts.
 
 - Mittels eines dritten Hosts (Bsp. th-srv) auf die Fortigate mittels der IP im script verbinden.
 
-Gui verbindung steht.
+GUI verbindung steht.
 
 ## Konfiguration (Mittels GUI)
 
@@ -64,4 +64,4 @@ Links im Reiter "Policy & Objects" dann -> "Firewall Policy":
 
 - Create a new Policy:
 
-![Create new Policy](./IMAGES/Fortinet_th-Create_Firewall_Policy.png)
+![Create new Policy](./IMAGES/Fortinet_th-fw-Create_Firewall_Policy.png)
