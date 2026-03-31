@@ -18,7 +18,7 @@ Um Site-to-Site Conectivity zwischen den Standorten "Oslo" und "Trondheim" zu er
 
 ### oslo-fw
 
-konfiguration des VPNs auf der Fortigate Firewall: oslo-fw:
+konfiguration des VPNs auf der Fortigate Firewall oslo-fw:
 
 - In der GUI unter dem Reiter: "VPN" dann -> "VPN-Wizzard":
 
