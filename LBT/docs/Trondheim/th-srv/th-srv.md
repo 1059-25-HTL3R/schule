@@ -12,7 +12,7 @@
 
 ## KeaDHCP
 
-Wir benutzen ISC-KEA statt ISC-DHCP, weil ISC-DHCP seit 2022 **end-of-life** erreicht hat. Außerdem sind 2 DHCP standorte in Throndheim Fragwürdig. (th-dc1 und th-srv haben beide nach Topologie eine DHCP funktion)
+Wir benutzen ISC-KEA statt ISC-DHCP, weil ISC-DHCP seit 2022 **end-of-life** erreicht hat. **Außerdem** sind 2 DHCP standorte in Throndheim Fragwürdig. (th-dc1 und th-srv haben beide nach Topologie eine DHCP funktion)
 
 Source: [Official Ubuntu Guide](https://ubuntu.com/server/docs/how-to/networking/install-isc-kea/)
 
