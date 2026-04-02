@@ -1,5 +1,21 @@
 # oslo-srv2
 
+- [oslo-srv2](#oslo-srv2)
+  - [BIND9](#bind9)
+    - [Instalation](#instalation)
+    - [Configuration](#configuration)
+    - [Service neustarten](#service-neustarten)
+  - [Postfix](#postfix)
+    - [Installieren](#installieren)
+    - [Grund-Konifigurieren](#grund-konifigurieren)
+    - [Mailbox format Konfigurieren](#mailbox-format-konfigurieren)
+    - [Smpt authentication konfiguration](#smpt-authentication-konfiguration)
+    - [TLS Konfiguration](#tls-konfiguration)
+  - [Prometheus Monitoring service](#prometheus-monitoring-service)
+    - [Node exporter Instalation](#node-exporter-instalation)
+    - [Automatisches Starten](#automatisches-starten)
+    - [Service aktiviren und starten](#service-aktiviren-und-starten)
+
 ## BIND9
 
 Ein DNS-Server in der DMZ soll als DNS-Forwarder für das gesammte Active-Direcoty dienen.
