@@ -2,6 +2,10 @@
 
 [Fortinet starting guide](https://docs.fortinet.com/document/fortigate/7.6.6/administration-guide/241541/connecting-using-a-web-browser)
 
+## Topo
+
+![Exemplarischer Aufbau der Topo](./LBT_Topologie_v3.png)
+
 ## Geräte
 
 ## windows Server
@@ -45,10 +49,10 @@
 
 ## fortigates
 
-| name    | vm  |
-| ------- | --- |
-| oslo-fw |     |
-| th-fw   |     |
+| name                                     | vm       |
+| ---------------------------------------- | -------- |
+| oslo-fw                                  |          |
+| [th-fw](./docs/Trondheim/th-fw/th-fw.md) | unfertig |
 
 ## pf
 

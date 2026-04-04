@@ -1,8 +1,8 @@
-# th-fw
+# oslo-fw
 
-Dient als Firewall des Trondheim Standorts.
+Dient als Firewall des Oslo Standorts.
 
-- [th-fw](#th-fw)
+- [oslo-fw](#oslo-fw)
   - [First login](#first-login)
   - [GUI-Verbindung](#gui-verbindung)
   - [Konfiguration (Mittels GUI)](#konfiguration-mittels-gui)
@@ -10,6 +10,7 @@ Dient als Firewall des Trondheim Standorts.
     - [Default Konfig der Fortigate mittel GUI](#default-konfig-der-fortigate-mittel-gui)
     - [Neue Firewall Policy erstellen](#neue-firewall-policy-erstellen)
     - [VPN: oslo-fw\_th-fw](#vpn-oslo-fw_th-fw)
+    - [VPN: oslo-fw\_sv-vpn](#vpn-oslo-fw_sv-vpn)
 
 ## First login
 
@@ -20,9 +21,9 @@ Dient als Firewall des Trondheim Standorts.
 
 ## GUI-Verbindung
 
-- script um ein Interface der Fortigate zu konfigurieren um auf die GUI zuzugreifen. [Link zum Script](../../../Scripts/Trondheim/th-fw.txt)
+- script um ein Interface der Fortigate zu konfigurieren um auf die GUI zuzugreifen. Und LAN seitige VLANS konfigurieren. [Link zum Script](../../../Scripts/Oslo/oslo-fw.txt)
 
-- Mittels eines dritten Hosts (Bsp. th-srv) auf die Fortigate mittels der IP im script verbinden.
+- Mittels eines dritten Hosts (Bsp. oslo-ansible) auf die Fortigate mittels der IP im script verbinden.
 
 GUI verbindung steht.
 
@@ -49,13 +50,13 @@ Links im Reiter "Sytem" dann -> "Settings":
 
 - Hostname und Timezone Ändern:
   
-  ![System Settings Screenshot](./IMAGES/Fortinet_th-fw_System_Settings.png)
+  ![System Settings Screenshot](./IMAGES/Fortinet_oslo-fw_System_Settings.png)
 
 Links im Reiter "Network" dann -> "Interfaces":
 
 - Interfaces Überprüfen:
 
-  ![Network Interface Settings](./IMAGES/Fortinet_th-fw_Network_Interface_Settings.png)
+  ![Network Interface Settings](./IMAGES/Fortinet_oslo-fw_Network_Interface_Settings.png)
 
   einfach nur schauen ob alles passt.
 
@@ -65,10 +66,16 @@ Links im Reiter "Policy & Objects" dann -> "Firewall Policy":
 
 - Create a new Policy:
 
-  ![Create new Policy](./IMAGES/Fortinet_th-fw-Create_Firewall_Policy.png)
+    ![Create new Policy](./IMAGES/Fortinet_oslo-fw-Create_Firewall_Policy.png)
 
 ### VPN: oslo-fw_th-fw
 
 Die Konfiguration ist hier aufzufinden:
 
-[Konfiguration oslo-fw_th-fw VPN](../../VPNs/oslo-fw_th-fw_VPN/oslo-fw_th-fw_VPN.md/#th-fw)
+[Konfiguration oslo-fw_th-fw VPN](../../VPNs/oslo-fw_th-fw_VPN/oslo-fw_th-fw_VPN.md/#oslo-fw)
+
+### VPN: oslo-fw_sv-vpn
+
+Die Konfiguration ist hier aufzufinden:
+
+[Konfiguration oslo-fw_sv-vpn VPN](../../VPNs/oslo-fw_sv-vpn_VPN/oslo-fw_sv-vpn_VPN.md)

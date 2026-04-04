@@ -41,3 +41,9 @@ IPv6 manuell?: Enter
 DHCP Server aktivieren?: n
 Revert to HTTP as the webConfigurator protocol?: y
 Enter
+
+### VPN: oslo-fw_sv-vpn
+
+Die Konfiguration ist hier aufzufinden:
+
+[Konfiguration oslo-fw_sv-vpn VPN](../../VPNs/oslo-fw_sv-vpn_VPN/oslo-fw_sv-vpn_VPN.md)
