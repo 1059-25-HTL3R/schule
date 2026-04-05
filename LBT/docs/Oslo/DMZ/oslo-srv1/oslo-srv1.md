@@ -1,5 +1,26 @@
 # oslo-srv1
 
+- [oslo-srv1](#oslo-srv1)
+  - [Apache](#apache)
+    - [Apache-instalation](#apache-instalation)
+    - [Zertifikat von CA erstellen](#zertifikat-von-ca-erstellen)
+      - [Step 1: Create the "Apache-Manual" Template](#step-1-create-the-apache-manual-template)
+      - [Step 2: Publish the Template](#step-2-publish-the-template)
+      - [Step 3: Generate the CSR (On the Apache Server)](#step-3-generate-the-csr-on-the-apache-server)
+      - [Step 4: Sign the CSR (On the CA/Windows Server)](#step-4-sign-the-csr-on-the-cawindows-server)
+      - [Step 5: Export the Root CA](#step-5-export-the-root-ca)
+    - [Apache HTTPS Konfiguration](#apache-https-konfiguration)
+  - [rSyslog](#rsyslog)
+    - [rSyslog-instalation](#rsyslog-instalation)
+  - [uFTPd](#uftpd)
+    - [uFTPd-instalation](#uftpd-instalation)
+      - [1. The "Check Your Text" Test](#1-the-check-your-text-test)
+      - [2. Converting to PEM (If needed)](#2-converting-to-pem-if-needed)
+      - [3. Handling the UFTP "Passphrase" Issue](#3-handling-the-uftp-passphrase-issue)
+      - [4. Final File Setup for UFTP](#4-final-file-setup-for-uftp)
+      - [5. Correcting those Permissions](#5-correcting-those-permissions)
+
+
 ## Apache
 
 Source: [Official Ubuntu-Apache Guide](https://ubuntu.com/tutorials/install-and-configure-apache)
