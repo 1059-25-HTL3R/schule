@@ -7,6 +7,7 @@
 ---
 
 ## 1. Fehleranalyse & Symptomatik
+
 Die Replikations-Topologie zwischen dem Hub-Standort **Oslo** und dem Subdomain-DC **Trondheim (TH-DC1)** war unterbrochen.
 
 * **RPC-Fehler (1722):** Kommunikation zwischen den Standorten schlug fehl, da die Namensauflösung der Subdomain `remote.corp.equinor.no` nicht korrekt delegiert war.
@@ -18,12 +19,14 @@ Die Replikations-Topologie zwischen dem Hub-Standort **Oslo** und dem Subdomain-
 ## 2. Detaillierte Fehlerbehebung
 
 ### Phase 1: DNS-Sanierung & Namensauflösung
+
 Zuerst wurde die Erreichbarkeit auf DNS-Ebene wiederhergestellt.
 
-1.  **Delegierung fixiert:** In der DNS-Konsole auf OSLO-DC2 wurde eine neue Delegierung für `remote` erstellt, die auf die IP von `TH-DC1` zeigt.
-2.  **ADSI-Edit Cleanup:** Manuelle Bereinigung verwaister DNS-Objekte in der Configuration-Partition:
+1. **Delegierung fixiert:** In der DNS-Konsole auf OSLO-DC2 wurde eine neue Delegierung für `remote` erstellt, die auf die IP von `TH-DC1` zeigt.
+2. **ADSI-Edit Cleanup:** Manuelle Bereinigung verwaister DNS-Objekte in der Configuration-Partition:
     * *Pfad:* `CN=MicrosoftDNS,CN=System,DC=corp,DC=equinor,DC=no`
-3.  **Konnektivitätstest:**
+3. **Konnektivitätstest:**
+
     ```powershell
     # Prüfung der DC-Auffindbarkeit
     nltest /dsgetdc:corp.equinor.no /site:Oslo
@@ -33,37 +36,43 @@ Zuerst wurde die Erreichbarkeit auf DNS-Ebene wiederhergestellt.
     ```
 
 ### Phase 2: Korrektur der Site-Topologie
+
 Um den Replikationsfluss logisch zu steuern, wurden die Site-Links in *AD Sites and Services* validiert.
 
-1.  **Site Link Erstellung:** Sicherstellung, dass der Site Link `Oslo-Trondheim` die Standorte korrekt verbindet.
-2.  **KCC-Trigger (Manuelle Topologie-Berechnung):**
+1. **Site Link Erstellung:** Sicherstellung, dass der Site Link `Oslo-Trondheim` die Standorte korrekt verbindet.
+2. **KCC-Trigger (Manuelle Topologie-Berechnung):**
+
     ```powershell
     # Zwingt den DC, neue Verbindungswege zu berechnen
     repadmin /kcc
     ```
 
 ### Phase 3: Durchbrechen des Replikations-Deadlocks (TH-DC1)
+
 Der Fehler 8452 verhinderte die Replikation, obwohl das Netzwerk stand. Dies wurde durch einen Registry-Eingriff und einen kontrollierten Reboot gelöst.
 
-1.  **Registry-Anpassung auf TH-DC1:**
+1. **Registry-Anpassung auf TH-DC1:**
     * *Pfad:* `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters`
     * *Aktion:* Erstellung des DWORD-Werts `Repl Perform Initial Synchronizations` = `0`.
-2.  **System-Reboot:** Neustart von `TH-DC1`, um den Verzeichnisdienst-Prozess (LSASS) zurückzusetzen.
-3.  **Manueller Sync-Anstoß von Oslo aus:**
+2. **System-Reboot:** Neustart von `TH-DC1`, um den Verzeichnisdienst-Prozess (LSASS) zurückzusetzen.
+3. **Manueller Sync-Anstoß von Oslo aus:**
+
     ```powershell
     # Synchronisation aller Partitionen erzwingen
     repadmin /syncall /APe
     ```
 
 ### Phase 4: Validierung & Bereinigung
+
 Nachdem das automatische Verbindungsobjekt (`<automatically generated>`) erschien, wurden die Altlasten entfernt.
 
-1.  **Manuelle Verbindungen löschen:** Alle händisch erstellten "Connection Objects" unter den NTDS Settings wurden gelöscht, um dem KCC die volle Kontrolle zurückzugeben.
-2.  **Registry-Cleanup:** Der Wert `Repl Perform Initial Synchronizations` wurde auf `TH-DC1` wieder gelöscht (Standardverhalten wiederhergestellt).
+1. **Manuelle Verbindungen löschen:** Alle händisch erstellten "Connection Objects" unter den NTDS Settings wurden gelöscht, um dem KCC die volle Kontrolle zurückzugeben.
+2. **Registry-Cleanup:** Der Wert `Repl Perform Initial Synchronizations` wurde auf `TH-DC1` wieder gelöscht (Standardverhalten wiederhergestellt).
 
 ---
 
 ## 3. Finaler Status-Check
+
 Die folgenden Befehle bestätigen die fehlerfreie Funktion des Gesamtsystems:
 
 ```powershell
@@ -78,6 +87,7 @@ repadmin /queue
 ```
 
 ### Besonderheit: Monitoring vom RODC (Stavanger)
+
 Bei der Ausführung von `repadmin /replsummary` auf dem SV-RODC tritt ein **Operational Error 58** bezüglich TH-DC1 auf.
 
 * **Ursache:** Dies ist ein erwartetes Verhalten in der Hub-and-Spoke-Topologie. Der RODC in Stavanger hat keine direkte Netzwerkroute zum DC in Trondheim.
