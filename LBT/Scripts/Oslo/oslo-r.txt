@@ -1,0 +1,78 @@
+! oslo-r
+
+enable
+configure terminal
+
+no ip domain lookup
+
+hostname oslo-r
+
+username cisco algorithm-type scrypt secret cisco
+username cisco privilege 15
+
+service password-encryption
+
+ip domain name corp.equinor.no
+crypto key generate rsa usage-keys modulus 4096
+ip ssh version 2
+
+line console 0
+  logging synchronous
+  login local
+  exec-timeout 0
+exit
+
+line vty 0 97
+  logging synchronous
+  login local
+  exec-timeout 0
+  ! transport input ssh
+exit
+
+
+! Interfaces
+int g1
+  desc to_Oslo_Domain_VLAN
+  ip address 10.3.3.208 255.255.255.0
+  no shutdown
+exit
+
+
+! Static Routes
+ip route 0.0.0.0 0.0.0.0 10.3.3.254
+
+do wri
+
+
+! NPS/RADIUS
+aaa new-model
+
+! 1. Server definieren
+radius server RADIUS-SERVER-DC1
+	address ipv4 10.3.3.201 auth-port 1812 acct-port 1813
+	key 0 Ganzgeheim123!
+
+! 2. Server der Gruppe hinzufügen
+aaa group server radius IAS
+	server name RADIUS-SERVER-DC1
+
+! 3. Restliche AAA-Konfiguration
+aaa authentication login userAuthentication local group IAS
+aaa authorization exec userAuthorization local group IAS if-authenticated
+aaa authorization network userAuthorization local group IAS
+aaa accounting exec default start-stop group IAS
+aaa accounting system default start-stop group IAS
+
+aaa session-id common
+
+privilege exec level 1 show config
+
+ip radius source-interface g1
+
+line vty 0 97
+	authorization exec userAuthorization
+	login authentication userAuthentication
+	transport input ssh telnet
+exit
+
+
