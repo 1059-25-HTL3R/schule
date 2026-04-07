@@ -24,9 +24,7 @@ exit
 
 line vty 0 97
   logging synchronous
-  login local
   exec-timeout 0
-  ! transport input ssh
 exit
 
 
