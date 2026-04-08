@@ -28,8 +28,10 @@
     - [Phase 3: The HA Configuration Wizard](#phase-3-the-ha-configuration-wizard)
     - [Phase 4: Adding the Second Broker](#phase-4-adding-the-second-broker)
     - [Phase 5: The "Certificate" Trap](#phase-5-the-certificate-trap)
+        - [](#)
     - [HA für RDS RD Licensing](#ha-für-rds-rd-licensing)
     - [HA für RDS Web Acces](#ha-für-rds-web-acces)
+  - [Remote Apps](#remote-apps)
 
 ## RDS Installation
 
@@ -256,7 +258,7 @@ Once the first broker successfully moves its data to SQL, you can add your redun
 1. In the same **Overview** screen, right-click the **RD Connection Broker** icon again.
 2. Select **Add RD Connection Broker Server**.
 3. Select your second server from the list.
-4. The wizard will automatically install the Broker role and point it to the SQL database you just configured.
+4. The wizard will automatically install the Broker role and point it to the SQL database you just configured
 
 ### Phase 5: The "Certificate" Trap
 
@@ -265,6 +267,22 @@ Once you have HA enabled, your brokers are now identified by that shared DNS nam
 - **Problem:** If your SSL certificate only lists the server's individual hostname (e.g., `Broker01.local`), users will get a certificate mismatch error when they try to connect.
 - **Fix:** You must deploy a **Subject Alternative Name (SAN)** certificate or a **Wildcard** certificate that includes the shared name (`RDS-Broker.yourdomain.local`). Apply this in the **Edit Deployment Properties > Certificates** section of Server Manager.
 
+#####
+
+Troubles:
+
+- SPN stuff:
+  
+  ```cmd
+  setspn -s TERMSRV/RDS-Broker OSLO-RDS1
+  setspn -s TERMSRV/RDS-Broker.corp.equinor.no OSLO-RDS1
+  setspn -s TERMSRV/RDS-Broker OSLO-RDS11
+  setspn -s TERMSRV/RDS-Broker.corp.equinor.no OSLO-RDS11
+  ```
+
+- GPO stuff:
+  - Credential Guard und Windows Server Baselines deaktivieren
+  - Neue GPO für Restircted Groups auf den Brokers
 
 ### HA für RDS RD Licensing
 
@@ -288,6 +306,20 @@ To add an RD Web Access server, perform the following steps:
 4. On the Confirmation page, click Add.
 5. Wait until the installation is complete and click Close.
 6. Configure your load-balancing solution with the IP address of the new RD Web Access server.
+
+## Remote Apps
+
+Neue Session Collection, da entweder Session-based Virutal Desktops oder Remote Apps in einer SC, nicht beides.
+
+Dann die Applications installieren:
+
+- Session Host muss im Install Mode sein (wird teilweise duch ``.msi`` selbst geregelt, sonst über control panel -> install remote desktop app)
+- remote app in sc publishen und konfigurieren:
+  - user acces rights
+  - default file extensions
+  - ...
+
+
 
 ![]()
 ![]()
